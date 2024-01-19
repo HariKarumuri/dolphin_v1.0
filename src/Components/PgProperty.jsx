@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-
+import { Link} from "react-router-dom";
 const PgProperty = () => {
   const [pgList, setPgList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -110,12 +110,13 @@ const PgProperty = () => {
       ) : (
         <ul>
           {pgList.results.map((pg) => (
-            <div
+            <Link
               key={pg.id}
+              to={`/property/${pg.id}`}
               className="property-home d-flex align-items-center justify-content-center"
             >
               <p className="fw-bold">{pg.name}</p>
-            </div>
+            </Link>
           ))}
         </ul>
       )}

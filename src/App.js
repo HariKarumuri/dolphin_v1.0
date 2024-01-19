@@ -7,7 +7,7 @@ import VacatingForm from "./Components/VactingForm";
 import Amenity from "./Components/Amenity";
 import Home from "./Home";
 import PgProperty from "./Components/PgProperty";
-
+import PgDetails from "./Components/PgDetails";
 function App() {
   return (
     <div className="App">
@@ -101,6 +101,7 @@ function App() {
           <Route path="/amenity" element={<Amenity />} />
           <Route path="/vactingforms" element={<VacatingForm />} />
           <Route path="/property" element={<PgProperty/>} />
+          <Route path="/property/:id" element={<PgDetails/>} />
         </Routes>
       </main>
     </div>
