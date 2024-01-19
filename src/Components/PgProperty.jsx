@@ -15,7 +15,7 @@ const PgProperty = () => {
     gender: "",
     lockin_period: "",
     notice_period: "",
-    property_images: [],
+    uploaded_images: [],
   });
 
   const handleInputChange = (e) => {
@@ -30,7 +30,7 @@ const PgProperty = () => {
     const files = e.target.files;
     setNewPgData((prevData) => ({
       ...prevData,
-      property_images: files,
+      uploaded_images: files,
     }));
   };
 
@@ -47,7 +47,7 @@ const PgProperty = () => {
       // Use FormData
       const formData = new FormData();
       for (const key in newPgData) {
-        if (key === "property_images") {
+        if (key === "uploaded_images") {
           for (let i = 0; i < newPgData[key].length; i++) {
             formData.append(`${key}[${i}]`, newPgData[key][i]);
           }
