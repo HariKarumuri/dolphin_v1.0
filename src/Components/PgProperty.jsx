@@ -111,12 +111,15 @@ const PgProperty = () => {
         <ul>
           {pgList.results.map((pg) => (
             <Link
-              key={pg.id}
-              to={`/property/${pg.id}`}
-              className="property-home d-flex align-items-center justify-content-center"
-            >
-              <p className="fw-bold">{pg.name}</p>
-            </Link>
+            key={pg.id}
+            to={`/property/${pg.id}`}
+            className="card text-center m-2 p-2"
+            style={{ textDecoration: 'none', color: 'inherit' }}
+          >
+            <div className="card-body">
+              <h5 className="card-title fw-bold">{pg.name}</h5>
+            </div>
+          </Link>
           ))}
         </ul>
       )}
