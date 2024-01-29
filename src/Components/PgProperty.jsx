@@ -108,12 +108,12 @@ const PgProperty = () => {
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <ul>
+        <ul className="row">
           {pgList.results.map((pg) => (
             <Link
             key={pg.id}
             to={`/property/${pg.id}`}
-            className="card text-center m-2 p-2"
+            className="card text-center m-2 p-2 col-md-4"
             style={{ textDecoration: 'none', color: 'inherit' }}
           >
             <div className="card-body">

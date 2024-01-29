@@ -56,7 +56,7 @@ const Amenity = () => {
       ) : (
         <div className="row">
           {amenities.map((amenity) => (
-            <div key={amenity.id} className="col-md-6 mb-3">
+            <div key={amenity.id} className="col-md-3 mb-3">
               <div className="card">
                 <div className="card-body">
                   <h5 className="card-title">{amenity.amenity_name}</h5>

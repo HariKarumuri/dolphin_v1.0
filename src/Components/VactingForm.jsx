@@ -38,6 +38,7 @@ const VacatingForm = () => {
               <th>Room Number</th>
               <th>Vacating Date</th>
               <th>Vacating Reason</th>
+              <th>Sent Recieved </th>
             </tr>
           </thead>
           <tbody>
@@ -58,6 +59,20 @@ const VacatingForm = () => {
                   })}
                 </td>
                 <td>{form.vacating_reason}</td>
+                <td>
+                  <a
+                    className="btn btn-success"
+                    href={`https://wa.me/${
+                      form.whatsapp_number
+                    }?text=${encodeURIComponent(
+                      `We have received your vacating form with the following details!:\nName: ${form.name}\nPG Name: ${form.pg_name}\nRoom Number: ${form.pg_room_number}\nVacating Reason: ${form.vacating_reason}`
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Send WhatsApp
+                  </a>
+                </td>
               </tr>
             ))}
           </tbody>

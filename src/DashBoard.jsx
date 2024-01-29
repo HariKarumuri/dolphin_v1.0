@@ -1,44 +1,25 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React from "react";
+import { useDolphinPGContext } from "./Context/DolphinPgcontext";
 
 const DashBoard = () => {
-  const [pgList, setPgList] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "https://popularpg.in/dolphinpg/properties/"
-        );
-        setPgList(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
+  const { properties,maintenanceFormData  } = useDolphinPGContext();
 
   return (
-    <div>
-      <h2>My PG List</h2>
-
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <ul>
-          {pgList.results.map((pg) => (
-            <li key={pg.id}>
-              <div className="property-home">
-                <p>{pg.name}</p>
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
+    <div className="container mt-4">
+      <div className="row">
+        <div className="col">
+          <div className="card">
+            <div className="card-body">
+              <h2 className="card-title">{properties.count} PGs</h2>
+            </div>
+          </div>
+          <div className="card">
+            <div className="card-body">
+              <h2 className="card-title">{maintenanceFormData.count} Maintenance Forms </h2>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

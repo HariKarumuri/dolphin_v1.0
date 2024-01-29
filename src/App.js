@@ -8,6 +8,12 @@ import Amenity from "./Components/Amenity";
 import Home from "./Home";
 import PgProperty from "./Components/PgProperty";
 import PgDetails from "./Components/PgDetails";
+import Room from './Components/Room';
+import RoomDetail from "./Components/Room/Roomdetail";
+import Receipt from './Components/testpdf';
+import JoiningData from "./Components/JoiningData";
+import Sendwhatsapp from './Components/Sendwhatsapp';
+import RentalForm from './Components/RentalForm';
 function App() {
   return (
     <div className="App">
@@ -85,6 +91,26 @@ function App() {
                     Amenities
                   </NavLink>
                 </li>
+                <li className="nav-item">
+                  <NavLink className="nav-link" activeClassName="active" to="/rooms">
+                    Rooms
+                  </NavLink>
+                </li>
+                <li className="nav-item">
+                  <NavLink className="nav-link" activeClassName="active" to="/joiningdata">
+                    Joining Data
+                  </NavLink>
+                </li>
+                <li className="nav-item">
+                  <NavLink className="nav-link" activeClassName="active" to="/sendWhatsapp">
+                    Whatsapp Links
+                  </NavLink>
+                </li>
+                <li className="nav-item">
+                  <NavLink className="nav-link" activeClassName="active" to="/rentalform">
+                    Renatal Form
+                  </NavLink>
+                </li>
                 
               </ul>
 
@@ -93,15 +119,22 @@ function App() {
         </div>
       </div>
 
-      <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4 mt-4">
         <Routes>
           <Route path="/" index element={<Home />} />
+          <Route path="/dashboard" index element={<DashBoard />} />
           <Route path="/bookings" element={<Bookings />} />
           <Route path="/maintenance" element={<Maintenance />} />
           <Route path="/amenity" element={<Amenity />} />
           <Route path="/vactingforms" element={<VacatingForm />} />
           <Route path="/property" element={<PgProperty/>} />
           <Route path="/property/:id" element={<PgDetails/>} />
+          <Route path="/rooms" element={<Room/>} />
+          <Route path="/rooms/beds/:id" element={<RoomDetail/>} />
+          <Route path="/pdftest" element={<Receipt/>} />
+          <Route path="/joiningdata" element={<JoiningData/>} />
+          <Route path="/sendWhatsapp" element={<Sendwhatsapp/>} />
+          <Route path="/rentalform" element={<RentalForm/>} />
         </Routes>
       </main>
     </div>
