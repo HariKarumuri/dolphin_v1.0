@@ -24,6 +24,39 @@ const VacatingForm = () => {
     fetchVacatingFormData();
   }, []);
 
+  const handleAcknowledgment = async (id, request) => {
+    // Display a confirmation dialog
+    const userConfirmed = window.confirm(
+      "Are you sure you want to acknowledge this request?"
+    );
+
+    // If the user confirms, proceed with acknowledgment
+    if (userConfirmed) {
+      try {
+        const requestData = {
+          ...request, // Use existing data
+          acknowledged: true,
+        };
+
+        await axios.put(
+          `https://popularpg.in/dolphinpg/vacatingform/${id}/`,
+          requestData
+        );
+
+        setVacatingFormData((prevData) =>
+          prevData.map((item) =>
+            item.id === id ? { ...item, acknowledged: true } : item
+          )
+        );
+
+        // Show an alert for confirmation
+        alert("Vacating form acknowledged successfully!");
+      } catch (error) {
+        console.error("Error acknowledging vacating form:", error);
+      }
+    }
+  };
+
   return (
     <div>
       <h2>Vacating Forms</h2>
@@ -40,7 +73,8 @@ const VacatingForm = () => {
               <th>Room Number</th>
               <th>Vacating Date</th>
               <th>Vacating Reason</th>
-              <th>Sent Recieved </th>
+              <th>Sent Recieved</th>
+              <th>Acknowledged</th>
             </tr>
           </thead>
           <tbody>
@@ -74,6 +108,16 @@ const VacatingForm = () => {
                   >
                     <FontAwesomeIcon icon={faWhatsapp} />
                   </a>
+                </td>
+                <td>
+                  <button
+                    className={`btn ${
+                      form.acknowledged ? "btn-success" : "btn-warning"
+                    }`}
+                    onClick={() => handleAcknowledgment(form.id, form)}
+                  >
+                    {form.acknowledged ? "Acknowledged" : "Resolve this !!"}
+                  </button>
                 </td>
               </tr>
             ))}

@@ -16,7 +16,7 @@ const Maintenance = () => {
     const fetchMaintenanceData = async () => {
       try {
         const response = await axios.get(
-          "http://127.0.0.1:8000/dolphinpgs/maintenance/"
+          "https://popularpg.in/dolphinpg/maintenance/"
         );
         setMaintenanceData(response.data.results);
         setLoading(false);
@@ -48,7 +48,7 @@ const Maintenance = () => {
         };
 
         await axios.put(
-          `http://127.0.0.1:8000/dolphinpgs/maintenance/${id}/`,
+          `https://popularpg.in/dolphinpg/maintenance/${id}/`,
           requestData
         );
 

@@ -2,9 +2,12 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
+import { Link } from "react-router-dom";
 
 const JoiningData = () => {
   const [joiningFormData, setJoiningFormData] = useState(null);
+  
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,22 +24,8 @@ const JoiningData = () => {
     fetchData();
   }, []);
 
-  const handleAssignRoomBed = async (id) => {
-    try {
-      // Adjust the endpoint and payload based on your Django API
-      const response = await axios.post(
-        "http://127.0.0.1:8000/api/room-beds/assign/",
-        {
-          tenantId: id, // Pass the tenant ID or any other relevant data needed for assignment
-        }
-      );
-
-      // Handle the response as needed
-      console.log("Room bed assigned successfully:", response.data);
-    } catch (error) {
-      console.error("Error assigning room bed:", error);
-    }
-  };
+  
+  
 
   if (!joiningFormData) {
     return <p>Loading...</p>;
@@ -59,7 +48,7 @@ const JoiningData = () => {
             <th>Security Deposit</th>
             <th>Vacating Date</th>
             <th>Send </th>
-            <th>Assign </th>
+            <th>Assign to a room</th>
           </tr>
         </thead>
         <tbody>
@@ -90,12 +79,13 @@ const JoiningData = () => {
                 </a>
               </td>
               <td>
-                <button
+                <Link to='/roomHome'
                   className="btn btn-warning"
-                  onClick={() => handleAssignRoomBed(item.id)}
+                  
                 >
                   Assign
-                </button>
+                </Link>
+               
               </td>
             </tr>
           ))}

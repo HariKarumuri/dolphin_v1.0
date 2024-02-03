@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useDolphinPGContext } from "../Context/DolphinPgcontext";
 
 const Room = () => {
   const { properties } = useDolphinPGContext();
+  const navigate = useNavigate();
 
   const { id: pgPropertyId } = useParams();
   const [roomData, setRoomData] = useState(null);
@@ -158,15 +159,22 @@ const Room = () => {
             <h6 className="mt-3">Room Beds:</h6>
             <div className="d-flex flex-wrap gap-2 ">
               {room.room_beds.map((bed) => (
-                <Link
-                  to={`/rooms/beds/${bed.id}`}
+                <div
+                  onClick={() =>
+                    navigate(`/rooms/beds/${bed.id}`, {
+                      state: {
+                        bedData: propertyName,
+                        pgPropertyId: pgPropertyId,
+                      },
+                    })
+                  }
                   key={bed.id}
-                  className={`room-bed-details border p-2 d-flex justify-content-center align-items-center text-decoration-none ${
+                  className={`room-bed-details border p-2 d-flex justify-content-center align-items-center text-decoration-none pointer-cursor ${
                     bed.is_vacant ? "bg-green" : "bg-red"
                   }`}
                 >
                   <strong>{bed.bed_name}</strong>
-                </Link>
+                </div>
               ))}
             </div>
           </div>

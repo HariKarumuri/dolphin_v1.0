@@ -220,3 +220,7 @@ body {
 .lh-tight {
   line-height: 1.25;
 }
+
+.pointer-cursor{
+  cursor: pointer;
+}
