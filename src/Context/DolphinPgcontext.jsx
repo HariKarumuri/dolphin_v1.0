@@ -1,10 +1,10 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { createContext, useContext, useState, useEffect } from "react";
+import axios from "axios";
 
 const DolphinPGContext = createContext();
 
 // Define your base URL
-const baseURL = 'http://127.0.0.1:8000/dolphinpgs/';
+const baseURL = "https://popularpg.in/dolphinpg/";
 
 export const DolphinPGProvider = ({ children }) => {
   const [properties, setProperties] = useState([]);
@@ -13,6 +13,8 @@ export const DolphinPGProvider = ({ children }) => {
   const [bedsFormData, setBedsFormData] = useState({});
   const [bookings, setBookings] = useState([]);
   const [amenities, setAmenities] = useState([]);
+  const [roomData, setRoomData] = useState([]);
+  const[joiningData,setJoiningData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,19 +23,25 @@ export const DolphinPGProvider = ({ children }) => {
         const propertiesResponse = await axios.get(`${baseURL}properties/`);
         const bookingsResponse = await axios.get(`${baseURL}bookings/`);
         const maintenanceResponse = await axios.get(`${baseURL}maintenance/`);
+        const amenitiesResponse = await axios.get(`${baseURL}amenities/`);
+        const roomDataResponse = await axios.get(`${baseURL}rooms/`);
+        const vactingDataResponse = await axios.get(`${baseURL}vacatingform/`);
+        const joingFormResponse = await axios.get(`${baseURL}tenantjoiningform/`);
 
         setProperties(propertiesResponse.data);
         setBookings(bookingsResponse.data);
         setMaintenanceFormData(maintenanceResponse.data);
-        
+        setAmenities(amenitiesResponse.data);
+        setRoomData(roomDataResponse.data);
+        setVacatingFormData(vactingDataResponse.data);
+        setJoiningData(joingFormResponse.data);
       } catch (error) {
-        console.error('Error fetching data:', error);
-        // Handle errors as needed
+        console.error("Error fetching data:", error);
       }
     };
 
     fetchData();
-  }, []);
+  }, []); // Empty dependency array ensures that the effect runs once on mount
 
   return (
     <DolphinPGContext.Provider
@@ -50,6 +58,8 @@ export const DolphinPGProvider = ({ children }) => {
         setBookings,
         amenities,
         setAmenities,
+        roomData,
+        joiningData,
       }}
     >
       {children}
@@ -60,7 +70,9 @@ export const DolphinPGProvider = ({ children }) => {
 export const useDolphinPGContext = () => {
   const context = useContext(DolphinPGContext);
   if (!context) {
-    throw new Error('useDolphinPGContext must be used within a DolphinPGProvider');
+    throw new Error(
+      "useDolphinPGContext must be used within a DolphinPGProvider"
+    );
   }
   return context;
 };

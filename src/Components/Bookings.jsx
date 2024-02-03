@@ -24,7 +24,7 @@ const Bookings = () => {
 
   return (
     <div>
-      <h2>Bookings</h2>
+      <h2>Booking requests from Dolphinstay.com</h2>
 
       {loading ? (
         <p>Loading...</p>

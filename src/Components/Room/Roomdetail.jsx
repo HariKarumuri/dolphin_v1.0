@@ -9,7 +9,7 @@ const RoomDetail = () => {
   useEffect(() => {
     const fetchRoomBed = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:8000/dolphinpgs/room-beds/${id}/`);
+        const response = await axios.get(`https://popularpg.in/dolphinpg/room-beds/${id}/`);
         setRoomBed(response.data);
       } catch (error) {
         console.error('Error fetching room bed details:', error);
@@ -17,7 +17,7 @@ const RoomDetail = () => {
     };
 
     fetchRoomBed();
-  }, [id]);
+  }, []);
 
   const handleUpdate = async () => {
     // Implement the update logic using axios.put

@@ -1,64 +1,99 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useDolphinPGContext } from '../Context/DolphinPgcontext';
 
 const Testing = () => {
-  const [productName, setProductName] = useState('hari2');
-  const [productPrice, setProductPrice] = useState('522.00');
-  const [uploadedImages, setUploadedImages] = useState([]);
+  const { amenities } = useDolphinPGContext();
+  const [formData, setFormData] = useState({
+    name: '',
+    amenities: [], // Change the name to 'amenities'
+    // Add other fields as needed
+  });
 
-  const handleImageChange = (e) => {
-    const files = e.target.files;
-    setUploadedImages(files);
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
-  const handleSubmit = async () => {
+  const handleAmenityClick = (amenityId) => {
+    // Toggle the selection of the amenity
+    setFormData((prevData) => {
+      const selectedAmenities = prevData.amenities.includes(amenityId)
+        ? prevData.amenities.filter((id) => id !== amenityId)
+        : [...prevData.amenities, amenityId];
+
+      return {
+        ...prevData,
+        amenities: selectedAmenities,
+      };
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
     try {
-      const formData = new FormData();
-      formData.append('name', productName);
-      formData.append('price', parseFloat(productPrice).toFixed(2)); // Ensure the price is formatted as desired
-      
-      for (let i = 0; i < uploadedImages.length; i++) {
-        formData.append('uploaded_images', uploadedImages[i]);
-      }
+      // Make a POST request to the backend API
+      await axios.post('http://127.0.0.1:8000/dolphinpgs/CheckerAmety/', formData);
 
-      const response = await axios.post('http://127.0.0.1:8000/dolphinpgs/new-product/', formData);
-
-      console.log('Response:', response.data);
+      // Handle success (e.g., show a success message)
+      console.log('Data submitted successfully!');
     } catch (error) {
-      console.error('Error:', error);
+      // Handle error (e.g., show an error message)
+      console.error('Error submitting data:', error);
     }
   };
 
+  useEffect(() => {
+    // Fetch amenities data when the component mounts
+    // (Assuming you have a function in the context to fetch amenities)
+    // fetchAmenities();
+  }, []); // Add dependencies if needed
+
   return (
-    <div>
-      <label>
-        Product Name:
-        <input
-          type="text"
-          value={productName}
-          onChange={(e) => setProductName(e.target.value)}
-        />
-      </label>
-      <br />
-      <label>
-        Product Price:
-        <input
-          type="text"
-          value={productPrice}
-          onChange={(e) => setProductPrice(e.target.value)}
-        />
-      </label>
-      <br />
-      <label>
-        Upload Images:
-        <input
-          type="file"
-          multiple
-          onChange={handleImageChange}
-        />
-      </label>
-      <br />
-      <button onClick={handleSubmit}>Submit</button>
+    <div className="container mt-4">
+      <h2>Submit Amty Checker Data</h2>
+      <form onSubmit={handleSubmit}>
+        <div className="mb-3">
+          <label htmlFor="name" className="form-label">
+            Name:
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="name"
+            name="name"
+            value={formData.name}
+            onChange={handleInputChange}
+          />
+        </div>
+
+        <div className="mb-3">
+          <label className="form-label">Select Amenities:</label>
+          <div className="btn-group">
+            {amenities.results &&
+              amenities.results.map((amenity) => (
+                <button
+                  key={amenity.id}
+                  type="button"
+                  className={`btn btn-outline-primary p-2 m-2  ${formData.amenities.includes(amenity.id) ? 'active' : ''}`}
+                  onClick={() => handleAmenityClick(amenity.id)}
+                >
+                  {amenity.amenity_name}
+                </button>
+              ))}
+          </div>
+        </div>
+
+        {/* Add other form fields as needed */}
+
+        <button type="submit" className="btn btn-primary">
+          Submit
+        </button>
+      </form>
     </div>
   );
 };

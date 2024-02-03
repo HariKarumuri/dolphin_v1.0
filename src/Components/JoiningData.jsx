@@ -42,7 +42,7 @@ const JoiningData = () => {
 
   return (
     <div className="container mt-4">
-      <h2 className="mb-4">Joining Form Data</h2>
+      <h2 className="mb-4">Tenant Joining Form Data</h2>
       <table className="table table-bordered table-striped">
         <thead className="thead-dark">
           <tr>
