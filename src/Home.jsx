@@ -5,8 +5,7 @@ import Amenity from './Components/Amenity'
 const Home = () => {
   return (
     <div>
-      <PgProperty/>
-      <Amenity/>
+      
     </div>
   )
 }

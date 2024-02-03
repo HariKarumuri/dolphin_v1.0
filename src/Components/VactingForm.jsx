@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 
 const VacatingForm = () => {
   const [vacatingFormData, setVacatingFormData] = useState([]);
@@ -70,7 +72,7 @@ const VacatingForm = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    Send WhatsApp
+                    <FontAwesomeIcon icon={faWhatsapp} />
                   </a>
                 </td>
               </tr>

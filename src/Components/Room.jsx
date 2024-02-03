@@ -96,10 +96,10 @@ const Room = () => {
     return <p>Loading...</p>;
   }
 
-  
-
   // Find the property with the matching id
-  const property = properties.results.find((property) => property.id === +pgPropertyId);
+  const property = properties.results.find(
+    (property) => property.id === +pgPropertyId
+  );
 
   // Check if the property is undefined
   if (!property) {
@@ -137,14 +137,19 @@ const Room = () => {
         </div>
       )}
 
-      <button
-        type="button"
-        className="btn btn-primary mb-3"
-        data-bs-toggle="modal"
-        data-bs-target="#addRoomModal"
-      >
-        Add Room
-      </button>
+      <div className="d-flex justify-content-between">
+        <h5>Rooms of {propertyName} </h5>
+
+        <button
+          type="button"
+          className="btn btn-primary mb-3"
+          data-bs-toggle="modal"
+          data-bs-target="#addRoomModal"
+        >
+          Add Room
+        </button>
+      </div>
+
       <div className="row">
         {filteredRooms.map((room) => (
           <div key={room.id} className="mb-4 border p-3 col-lg-3">

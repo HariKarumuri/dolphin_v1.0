@@ -42,14 +42,16 @@ const Amenity = () => {
 
   return (
     <div>
-      <h2>Amenities</h2>
+      <div className="d-flex justify-content-between">
+        <h2>Amenities</h2>
 
-      <button
-        className="btn btn-primary mb-3"
-        onClick={() => setShowModal(true)}
-      >
-        Add Amenity
-      </button>
+        <button
+          className="btn btn-primary mb-3"
+          onClick={() => setShowModal(true)}
+        >
+          Add Amenity
+        </button>
+      </div>
 
       {loading ? (
         <p>Loading...</p>

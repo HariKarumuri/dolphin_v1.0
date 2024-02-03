@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 
 const JoiningData = () => {
   const [joiningFormData, setJoiningFormData] = useState(null);
@@ -25,14 +27,14 @@ const JoiningData = () => {
       const response = await axios.post(
         "http://127.0.0.1:8000/api/room-beds/assign/",
         {
-          tenantId: id,  // Pass the tenant ID or any other relevant data needed for assignment
+          tenantId: id, // Pass the tenant ID or any other relevant data needed for assignment
         }
       );
 
       // Handle the response as needed
-      console.log('Room bed assigned successfully:', response.data);
+      console.log("Room bed assigned successfully:", response.data);
     } catch (error) {
-      console.error('Error assigning room bed:', error);
+      console.error("Error assigning room bed:", error);
     }
   };
 
@@ -56,7 +58,7 @@ const JoiningData = () => {
             <th>Monthly Rent</th>
             <th>Security Deposit</th>
             <th>Vacating Date</th>
-            <th>Sent Recieved </th>
+            <th>Send </th>
             <th>Assign </th>
           </tr>
         </thead>
@@ -84,7 +86,7 @@ const JoiningData = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Send 
+                  <FontAwesomeIcon icon={faWhatsapp} />
                 </a>
               </td>
               <td>
