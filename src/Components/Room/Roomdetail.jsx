@@ -161,10 +161,9 @@ const Roomdetail = () => {
               ? "Yes the bed is empty, can be assigned to a user"
               : "No, already Occupied by Assigned tenant below"}
           </p>
-          <p>Tenant Details: {roomDetails.tenant_details}</p>
 
           <p>
-            Assign Tenant:{" "}
+            <span className="fw-bold">Assign a Tenant / Assigned Tenant: </span>
             {joiningData.results && joiningData.results.length > 0
               ? joiningData.results.find(
                   (tenant) => tenant.id === roomDetails.assign_tenant
@@ -240,15 +239,30 @@ const Roomdetail = () => {
                         }`}
                         id="assignTenant"
                         value={updatedData.assign_tenant}
-                        onChange={(e) =>
-                          setUpdatedData({
-                            ...updatedData,
-                            assign_tenant: e.target.value,
-                            is_vacant: false,
-                          })
-                        }
+                        onChange={(e) => {
+                          const selectedValue = e.target.value;
+
+                          // Check if the selected option is "Vacant Room"
+                          if (selectedValue === "vacant") {
+                            setUpdatedData({
+                              ...updatedData,
+                              assign_tenant: null,
+                              is_vacant: true,
+                            });
+                          } else {
+                            // For other options, update assign_tenant and is_vacant accordingly
+                            setUpdatedData({
+                              ...updatedData,
+                              assign_tenant: selectedValue,
+                              is_vacant: false,
+                            });
+                          }
+                        }}
                       >
                         <option value={null}>Not Assigned</option>
+                        <option value="vacant">
+                          Vacant This Room/ Empty the room
+                        </option>
                         {filteredTenants.map((tenant) => (
                           <option key={tenant.id} value={tenant.id}>
                             {tenant.name} - id :{tenant.id}

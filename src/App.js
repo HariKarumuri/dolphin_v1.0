@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { NavLink, Route, Routes } from "react-router-dom";
 import Bookings from "./Components/Bookings";
 import DashBoard from "./DashBoard";
@@ -17,21 +17,23 @@ import RentalForm from "./Components/RentalForm";
 import PgBed from "./Components/PgBed";
 import RoomHome from "./Components/Room/RoomHome";
 import Testing from "./Components/Testing";
-
+import logo from "./assets/Dolphin.png";
 import { useDolphinPGContext } from "./Context/DolphinPgcontext";
+import PrivateRoutes from "./util/PrivateRoutes";
+import Login from "./Components/login";
+import QueryParam from "./Components/Query param generator/QueryParam";
+import AuthContext from "./Context/AuthContext";
 
 function App() {
   const { properties } = useDolphinPGContext();
+  const { logoutUser } = useContext(AuthContext);
 
   return (
     <div className="App">
       {/* Header */}
-      <header className="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-        <a className="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">
-          Dolphin Admin
-        </a>
+      <header className="navbar n sticky-top bg-light flex-md-nowrap p-0 shadow">
         <button
-          className="navbar-toggler position-absolute d-md-none collapsed"
+          className="navbar-toggler  d-md-none collapsed"
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#sidebarMenu"
@@ -41,17 +43,24 @@ function App() {
         >
           <span className="navbar-toggler-icon"></span>
         </button>
-        <input
-          className="form-control form-control-dark w-100"
-          type="text"
-          placeholder="Search"
-          aria-label="Search"
-        />
+        <a className=" col-md-3 col-lg-2 me-0 px-3 my-2">
+          <img
+            src={logo}
+            class="img-fluid ${3|rounded-top,rounded-right,rounded-bottom,rounded-left,rounded-circle,|}"
+            alt=""
+            height="50px"
+            width="90px"
+          />
+        </a>
+
         <div className="navbar-nav">
           <div className="nav-item text-nowrap">
-            <a className="nav-link px-3" href="#">
+            <button
+              className="btn btn-danger px-3 pointer-cursor"
+              onClick={logoutUser}
+            >
               Sign out
-            </a>
+            </button>
           </div>
         </div>
       </header>
@@ -70,7 +79,7 @@ function App() {
                     className="nav-link"
                     activeClassName="active"
                     exact
-                    to="/dashboard"
+                    to="/"
                   >
                     <h5>Dashboard</h5>
                   </NavLink>
@@ -122,7 +131,7 @@ function App() {
                     data-bs-target="#orders-collapse"
                     aria-expanded="false"
                   >
-                    Orders
+                    Requests & Responses
                   </button>
                   <div class="collapse" id="orders-collapse">
                     <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
@@ -139,27 +148,28 @@ function App() {
                         <NavLink
                           className="nav-link"
                           activeClassName="active"
-                          to="/vactingforms"
+                          to="/joiningdata"
                         >
-                          Vacating Forms
+                          Joining Requests
                         </NavLink>
                       </li>
                       <li className="nav-item">
                         <NavLink
                           className="nav-link"
                           activeClassName="active"
-                          to="/joiningdata"
+                          to="/vactingforms"
                         >
-                          Joining Data
+                          Vacating Responses
                         </NavLink>
                       </li>
+
                       <li className="nav-item">
                         <NavLink
                           className="nav-link"
                           activeClassName="active"
                           to="/rentalform"
                         >
-                          Rental Form
+                          Rental Response
                         </NavLink>
                       </li>
                     </ul>
@@ -204,7 +214,6 @@ function App() {
                     </ul>
                   </div>
                 </li>
-                
 
                 <li className="nav-item">
                   <NavLink
@@ -213,6 +222,15 @@ function App() {
                     to="/sendWhatsapp"
                   >
                     Whatsapp Links
+                  </NavLink>
+                </li>
+                <li className="nav-item">
+                  <NavLink
+                    className="nav-link"
+                    activeClassName="active"
+                    to="/generator"
+                  >
+                    Tenant Form Link Generator
                   </NavLink>
                 </li>
               </ul>
@@ -224,23 +242,26 @@ function App() {
       {/* Main Content */}
       <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4 mt-4">
         <Routes>
-          <Route path="/" index element={<Home />} />
-          <Route path="/dashboard" index element={<DashBoard />} />
-          <Route path="/bookings" element={<Bookings />} />
-          <Route path="/maintenance" element={<Maintenance />} />
-          <Route path="/amenity" element={<Amenity />} />
-          <Route path="/vactingforms" element={<VacatingForm />} />
-          <Route path="/property" element={<PgProperty />} />
-          <Route path="/property/:id" element={<PgDetails />} />
-          <Route path="/rooms/:id" element={<Room />} />
-          <Route path="/rooms/beds/:id" element={<RoomDetail />} />
-          <Route path="/pdftest" element={<Receipt />} />
-          <Route path="/joiningdata" element={<JoiningData />} />
-          <Route path="/sendWhatsapp" element={<Sendwhatsapp />} />
-          <Route path="/rentalform" element={<RentalForm />} />
-          <Route path="/pgbeds" element={<PgBed />} />
-          <Route path="/roomHome" element={<RoomHome />} />
-          <Route path="/testing" element={<Testing />} />
+          <Route path="/login" element={<Login />} />
+          <Route element={<PrivateRoutes />}>
+            <Route path="/" index element={<DashBoard />} />
+            <Route path="/bookings" element={<Bookings />} />
+            <Route path="/maintenance" element={<Maintenance />} />
+            <Route path="/amenity" element={<Amenity />} />
+            <Route path="/vactingforms" element={<VacatingForm />} />
+            <Route path="/property" element={<PgProperty />} />
+            <Route path="/property/:id" element={<PgDetails />} />
+            <Route path="/rooms/:id" element={<Room />} />
+            <Route path="/rooms/beds/:id" element={<RoomDetail />} />
+            <Route path="/pdftest" element={<Receipt />} />
+            <Route path="/joiningdata" element={<JoiningData />} />
+            <Route path="/sendWhatsapp" element={<Sendwhatsapp />} />
+            <Route path="/rentalform" element={<RentalForm />} />
+            <Route path="/pgbeds" element={<PgBed />} />
+            <Route path="/roomHome" element={<RoomHome />} />
+            <Route path="/testing" element={<Testing />} />
+            <Route path="/generator" element={<QueryParam />} />
+          </Route>
         </Routes>
       </main>
     </div>

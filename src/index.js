@@ -4,14 +4,17 @@ import "./index.css";
 import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import { DolphinPGProvider } from "./Context/DolphinPgcontext";
+import { AuthProvider } from "./Context/AuthContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <DolphinPGProvider>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </DolphinPGProvider>
+    <BrowserRouter>
+      <AuthProvider>
+        <DolphinPGProvider>
+          <App />
+        </DolphinPGProvider>
+      </AuthProvider>
+    </BrowserRouter>
   </React.StrictMode>
 );
