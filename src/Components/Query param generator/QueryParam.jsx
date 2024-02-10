@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import ClipboardJS from "clipboard";
+import { useDolphinPGContext } from "../../Context/DolphinPgcontext";
 
 const generateQueryParamLink = (params) => {
   const queryParams = new URLSearchParams(params);
-  return `http://localhost:3000/TenantJoiningForm?${queryParams}`;
+  return `https://dolphinstay.com/TenantJoiningForm?${queryParams}`;
 };
 
 const QueryParam = () => {
@@ -15,6 +16,10 @@ const QueryParam = () => {
     requested_room_number: "",
     pg_name: "",
   });
+
+  const { properties } = useDolphinPGContext();
+  
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -48,6 +53,8 @@ const QueryParam = () => {
   // Generate the link
   const generatedLink = generateQueryParamLink(inputParams);
 
+  console.log(properties);
+
   return (
     <div className="container mt-5">
       <h2 className="mb-4">Update Input Parameters:</h2>
@@ -57,14 +64,21 @@ const QueryParam = () => {
             <label htmlFor="pg_name" className="form-label">
               PG Name:
             </label>
-            <input
-              type="text"
-              id="pg_name"
+            <select
               name="pg_name"
+              id="pg_name"
+              className="form-control"
               value={inputParams.pg_name}
               onChange={handleChange}
-              className="form-control"
-            />
+            >
+              <option value="">Select PG Name</option>
+              {properties.results &&
+                properties.results.map((item) => (
+                  <option value={item.name} key={item.id}>
+                    {item.name}
+                  </option>
+                ))}
+            </select>
           </div>
           <div className="mb-3 col-4">
             <label htmlFor="requested_room_number" className="form-label">
@@ -135,7 +149,7 @@ const QueryParam = () => {
         </div>
       </form>
 
-      <h2 className="mt-4">Generated Link:</h2>
+      <h2 className="mt-4">Tenant Form Generated Link:</h2>
       <div className="input-group mb-3">
         <input
           type="text"
