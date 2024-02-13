@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDolphinPGContext } from "../Context/DolphinPgcontext";
 import axios from "axios";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-  import { faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faTrash } from '@fortawesome/free-solid-svg-icons'
 
 const PgBed = ({ pg_id }) => {
   const { properties } = useDolphinPGContext();
@@ -17,6 +17,7 @@ const PgBed = ({ pg_id }) => {
       pg_property: pg_id,
     },
   ]);
+  const [showAlert, setShowAlert] = useState(false); // State for showing success alert
 
   // Function to handle form input changes for a specific bed entry
   const handleInputChange = (e, index) => {
@@ -39,6 +40,16 @@ const PgBed = ({ pg_id }) => {
 
       // All bed entries submitted successfully
       console.log("All bed entries submitted successfully");
+      setShowAlert(true); // Show success alert
+      setBeds([
+        {
+          name: "",
+          price: null,
+          deposit: null,
+          sharing: "",
+          pg_property: pg_id,
+        },
+      ]); // Reset the form
     } catch (error) {
       console.error("Error submitting bed entries:", error);
     }
@@ -131,20 +142,26 @@ const PgBed = ({ pg_id }) => {
                   onChange={(e) => handleInputChange(e, index)}
                 >
                   <option value="">Select Sharing</option>
-                  <option value="one">One</option>
-                  <option value="two">Two</option>
-                  <option value="three">Three</option>
+                  <option value="one">Single</option>
+                  <option value="two">Double</option>
+                  <option value="three">Triple</option>
                   <option value="four">Four</option>
                 </select>
               </div>
             </div>
           </div>
         ))}
-
+        {showAlert && (
+        <div className="alert alert-success mt-3" role="alert">
+          Bed entries submitted successfully!
+        </div>
+      )}
         <button type="submit" className="btn btn-success">
           Submit Beds
         </button>
       </form>
+
+      
     </div>
   );
 };

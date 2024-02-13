@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect ,useRef } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { useDolphinPGContext } from "../Context/DolphinPgcontext";
@@ -11,6 +11,11 @@ const PgProperty = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [selectedImages, setSelectedImages] = useState([]);
+  const fileInputRef = useRef(null);
+
+      const handleUploadClick = () => {
+        fileInputRef.current.click();
+      };
   const [newPgData, setNewPgData] = useState({
     name: "",
     street_address: "",
@@ -54,18 +59,29 @@ const PgProperty = () => {
 
   const handleImageChange = (e) => {
     const files = e.target.files;
-    setNewPgData((prevData) => ({
-      ...prevData,
-      uploaded_images: files,
+    const newImages = Array.from(files).map((file) => ({
+      title: file.name,
+      size: (file.size / (1024 * 1024)).toFixed(2),
+      file: file, // Keep the actual File object
     }));
 
-    // Update selectedImages state to display the selected images
-    const imagesInfo = Array.from(files).map((file) => ({
-      title: file.name,
-      size: (file.size / (1024 * 1024)).toFixed(2), // Convert size to MB
-    }));
-    setSelectedImages(imagesInfo);
+    setSelectedImages([...selectedImages, ...newImages]);
   };
+
+  const removeImage = (index) => {
+    const newImages = [...selectedImages];
+    newImages.splice(index, 1);
+    setSelectedImages(newImages);
+  };
+
+  const handleUpload = () => {
+    // Here you can handle the upload logic
+    setNewPgData((prevData) => ({
+      ...prevData,
+      uploaded_images: [...prevData.uploaded_images, ...selectedImages.map(img => img.file)],
+    }));
+  };
+
 
   const handleCoverImageChange = (e) => {
     const file = e.target.files[0];
@@ -108,6 +124,8 @@ const PgProperty = () => {
           "Content-Type": "multipart/form-data",
         },
       };
+
+      
 
       await axios.post(
         "https://popularpg.in/dolphinpg/properties/",
@@ -406,20 +424,53 @@ const PgProperty = () => {
                       accept="image/*"
                       onChange={handleCoverImageChange}
                     />
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="propertyImages" className="form-label">
-                      Property Images (multiple)
+                  </div> 
+                  <label htmlFor="propertyCoverImages" className="form-label">
+                      Property Multiple Images
                     </label>
+                  <div className=" input-group mb-3">
+                   
                     <input
                       type="file"
-                      className="form-control"
                       id="propertyImages"
+                      className="form-control"
                       multiple
                       accept="image/*"
                       onChange={handleImageChange}
                     />
+                 
+                 <div>
+      <button
+        className="btn btn-sm btn-dark"
+        onClick={handleUploadClick}
+      >
+        Add More
+      </button>
+      {/* Hidden input element */}
+      <input
+        type="file"
+        ref={fileInputRef}
+        style={{ display: "none" }}
+        multiple
+        accept="image/*"
+        onChange={handleImageChange}
+      />
+    </div>
                   </div>
+                  {selectedImages.map((img, index) => (
+                      <div key={index}>
+                        <img
+                          src={URL.createObjectURL(img.file)}
+                          alt={img.title}
+                          width="100"
+                          height="100"
+                        />
+                        <span>{img.title}</span>
+                        <button className="btn btn-secondary btn-sm my-1" onClick={() => removeImage(index)}>
+                          x
+                        </button>
+                      </div>
+                    ))}
 
                   {selectedImages.length > 0 && (
                     <div className="mb-3">
