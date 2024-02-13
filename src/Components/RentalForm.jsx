@@ -26,7 +26,7 @@ const RentalForm = () => {
       <table className="table">
         <thead>
           <tr>
-            <th>ID</th>
+            <th>Date Recieved</th>
             <th>Name</th>
             <th>PG Name</th>
             <th>Room Number</th>
@@ -34,7 +34,7 @@ const RentalForm = () => {
             <th>Rent</th>
             <th>Total Amount</th>
             <th>Mobile Number</th>
-            <th>Date Recieved</th>
+
             <th>Payment Image</th>
             <th>Sent Recieved </th>
           </tr>
@@ -42,14 +42,6 @@ const RentalForm = () => {
         <tbody>
           {rentalData.map((rental) => (
             <tr key={rental.id}>
-              <td>{rental.id}</td>
-              <td>{rental.name}</td>
-              <td>{rental.pg_name}</td>
-              <td>{rental.room_number}</td>
-              <td>{rental.deposit}</td>
-              <td>{rental.rent}</td>
-              <td>{rental.total_amount}</td>
-              <td>{rental.mobile_number}</td>
               <td>
                 {new Date(rental.created_at).toLocaleString("en-GB", {
                   day: "numeric",
@@ -60,12 +52,27 @@ const RentalForm = () => {
                   hour12: true,
                 })}
               </td>
+              <td>{rental.name}</td>
+              <td>{rental.pg_name}</td>
+              <td>{rental.room_number}</td>
+              <td>{rental.deposit}</td>
+              <td>{rental.rent}</td>
+              <td>{rental.total_amount}</td>
+              <td>{rental.mobile_number}</td>
+
               <td>
-                <img
-                  src={rental.payment_image}
-                  alt={`Payment Image for ${rental.name}`}
-                  style={{ width: "100px", height: "auto" }}
-                />
+                <a
+                  href={rental.payment_image}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-decoration-none"
+                >
+                  <img
+                    src={rental.payment_image}
+                    alt={`Payment Image for ${rental.name}`}
+                    style={{ width: "100px", height: "auto" }}
+                  />
+                </a>
               </td>
               <td>
                 <a

@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { NavLink, Route, Routes } from "react-router-dom";
+import { Link, NavLink, Route, Routes } from "react-router-dom";
 import Bookings from "./Components/Bookings";
 import DashBoard from "./DashBoard";
 import Maintenance from "./Components/Maintance";
@@ -26,7 +26,7 @@ import AuthContext from "./Context/AuthContext";
 
 function App() {
   const { properties } = useDolphinPGContext();
-  const { logoutUser } = useContext(AuthContext);
+  const { user, logoutUser } = useContext(AuthContext);
 
   return (
     <div className="App">
@@ -55,12 +55,20 @@ function App() {
 
         <div className="navbar-nav">
           <div className="nav-item text-nowrap">
-            <button
-              className="btn btn-danger px-3 pointer-cursor"
-              onClick={logoutUser}
-            >
-              Sign out
-            </button>
+            {user && user ? (
+              <button
+                className="btn btn-danger px-3 pointer-cursor mx-3"
+                onClick={logoutUser}
+              >
+                Sign out
+              </button>
+            ) : (
+              <button className="btn btn-success px-3 pointer-cursor mx-3">
+                <Link to="/login" className="text-white text-decoration-none">
+                  Sign in
+                </Link>
+              </button>
+            )}
           </div>
         </div>
       </header>
