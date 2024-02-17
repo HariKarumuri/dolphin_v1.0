@@ -6,8 +6,7 @@ import { Link } from "react-router-dom";
 
 const JoiningData = () => {
   const [joiningFormData, setJoiningFormData] = useState(null);
-  
-
+  const [sortOrder, setSortOrder] = useState("desc");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,16 +23,28 @@ const JoiningData = () => {
     fetchData();
   }, []);
 
-  
-  
+  const handleSort = () => {
+    setSortOrder(sortOrder === "desc" ? "asc" : "desc");
+  };
 
   if (!joiningFormData) {
     return <p>Loading...</p>;
   }
 
+  // Sort the data based on the date_of_joining field
+  const sortedData = joiningFormData.results.sort((a, b) => {
+    const dateA = new Date(a.created_at);
+    const dateB = new Date(b.created_at);
+
+    return sortOrder === "desc" ? dateB - dateA : dateA - dateB;
+  });
+
   return (
     <div className="container mt-4">
       <h2 className="mb-4">Tenant Joining Form Data</h2>
+      <button onClick={handleSort}>
+        {sortOrder === "desc" ? "Sort Oldest First" : "Sort Newest First"}
+      </button>
       <table className="table table-bordered table-striped">
         <thead className="thead-dark">
           <tr>
@@ -52,7 +63,7 @@ const JoiningData = () => {
           </tr>
         </thead>
         <tbody>
-          {joiningFormData.results.map((item) => (
+          {sortedData.map((item) => (
             <tr key={item.id}>
               <td>{item.id}</td>
               <td>{item.name}</td>
@@ -79,13 +90,9 @@ const JoiningData = () => {
                 </a>
               </td>
               <td>
-                <Link to='/roomHome'
-                  className="btn btn-warning"
-                  
-                >
+                <Link to="/roomHome" className="btn btn-warning">
                   Assign
                 </Link>
-               
               </td>
             </tr>
           ))}

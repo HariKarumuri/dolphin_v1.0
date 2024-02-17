@@ -37,8 +37,8 @@ const Room = () => {
 
   // Filter rooms based on pg_property
   const filteredRooms =
-    roomData && roomData.results
-      ? roomData.results.filter((room) => room.pg_property === +pgPropertyId)
+    roomData && roomData
+      ? roomData.filter((room) => room.pg_property === +pgPropertyId)
       : [];
 
   const handleAddRoom = async () => {
