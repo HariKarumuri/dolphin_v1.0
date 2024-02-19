@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link, useParams, useLocation } from "react-router-dom";
+import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
 import { useDolphinPGContext } from "../../Context/DolphinPgcontext";
 
 const Roomdetail = () => {
@@ -8,6 +8,7 @@ const Roomdetail = () => {
   const location = useLocation();
   const { bedData, pgPropertyId } = location.state;
   const { joiningData } = useDolphinPGContext();
+  const navigate = useNavigate();
 
   const [roomDetails, setRoomDetails] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -100,6 +101,42 @@ const Roomdetail = () => {
     setSearchTerm(term);
   };
 
+  const handleDelete = async () => {
+    // Display a confirmation dialog
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this room?"
+    );
+
+    if (!confirmDelete) {
+      return; // User clicked "Cancel" in the confirmation dialog
+    }
+
+    try {
+      // Make the delete API call
+      await axios.delete(`https://popularpg.in/dolphinpg/room-beds/${id}/`);
+
+      setTimeout(() => {
+        fetchRoomDetails();
+        navigate(-1);
+      }, 1000);
+
+      setSuccessAlert(true);
+
+      // Hide success alert after 3 seconds
+      setTimeout(() => {
+        setSuccessAlert(false);
+      }, 1000);
+    } catch (error) {
+      console.error("Error deleting room details:", error);
+      setErrorAlert(true);
+
+      // Hide error alert after 3 seconds
+      setTimeout(() => {
+        setErrorAlert(false);
+      }, 3000);
+    }
+  };
+
   return (
     <div>
       <nav aria-label="breadcrumb">
@@ -179,6 +216,15 @@ const Roomdetail = () => {
             data-bs-target="#updateRoomModal"
           >
             Update
+          </button>
+
+          {/* Delete Button */}
+          <button
+            type="button"
+            className="btn btn-danger"
+            onClick={handleDelete}
+          >
+            Delete
           </button>
 
           {/* Update Modal */}

@@ -60,6 +60,7 @@ export const DolphinPGProvider = ({ children }) => {
         setAmenities,
         roomData,
         joiningData,
+        
       }}
     >
       {children}

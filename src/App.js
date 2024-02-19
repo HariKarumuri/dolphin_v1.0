@@ -263,6 +263,7 @@ function App() {
             <Route path="/rooms/beds/:id" element={<RoomDetail />} />
             <Route path="/pdftest" element={<Receipt />} />
             <Route path="/joiningdata" element={<JoiningData />} />
+            <Route path="/joiningdata/:id" element={<JoiningData />} />
             <Route path="/sendWhatsapp" element={<Sendwhatsapp />} />
             <Route path="/rentalform" element={<RentalForm />} />
             <Route path="/pgbeds" element={<PgBed />} />
