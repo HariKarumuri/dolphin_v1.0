@@ -42,7 +42,7 @@ function App() {
     };
 
     fetchData(); // Call the fetchData function
-  }, []);
+  }, [api]);
 
   return (
     <div className="App">
@@ -59,10 +59,10 @@ function App() {
         >
           <span className="navbar-toggler-icon"></span>
         </button>
-        <a className=" col-md-3 col-lg-2 me-0 px-3 my-2">
+        <a className=" col-md-3 col-lg-2 me-0 px-3 my-2" href="/">
           <img
             src={logo}
-            class="img-fluid ${3|rounded-top,rounded-right,rounded-bottom,rounded-left,rounded-circle,|}"
+            className ="img-fluid "
             alt=""
             height="50px"
             width="90px"
