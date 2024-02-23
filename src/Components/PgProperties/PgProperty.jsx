@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { useDolphinPGContext } from "../Context/DolphinPgcontext";
-import useAxios from "../util/useAxios";
+import { useDolphinPGContext } from "../../Context/DolphinPgcontext";
+import useAxios from "../../util/useAxios";
 
 const PgProperty = () => {
   const [amenities, setAmenities] = useState({ results: [] });

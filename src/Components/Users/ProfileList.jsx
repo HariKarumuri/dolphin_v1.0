@@ -118,7 +118,9 @@ const ProfileList = () => {
       toastr.success("Profile added successfully!", "Success");
 
       // Update the state with the new data
-      setProfiles((prevProfiles) => [...prevProfiles, newProfile]);
+      setProfiles((prevProfiles) => ({
+        results: [...prevProfiles.results, newProfile],
+      }));
 
       setNewProfile({
         user: {

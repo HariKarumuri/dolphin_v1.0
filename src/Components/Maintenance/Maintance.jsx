@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import useAxios from "./../util/useAxios";
+import useAxios from "../../util/useAxios";
 
 const Maintenance = () => {
   const [maintenanceData, setMaintenanceData] = useState({ results: [] });
@@ -47,7 +47,7 @@ const Maintenance = () => {
         await api.put(`/dolphinpg/maintenance/${id}/`, requestData);
 
         setMaintenanceData((prevData) =>
-          prevData.map((item) =>
+          prevData.results.map((item) =>
             item.id === id ? { ...item, acknowledged: true } : item
           )
         );
@@ -60,7 +60,7 @@ const Maintenance = () => {
     }
   };
 
-  const filteredData = maintenanceData.results.filter((request) => {
+  const filteredData = maintenanceData.results && maintenanceData.results.filter((request) => {
     const matchesPGName =
       request.pg_name.toLowerCase().includes(filterPGName.toLowerCase()) ||
       filterPGName === "";
@@ -147,7 +147,7 @@ const Maintenance = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredData.map((request) => (
+            {filteredData && filteredData.map((request) => (
               <tr
                 key={request.id}
                 className={request.acknowledged ? "acknowledged-row" : ""}

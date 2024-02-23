@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import useAxios from "./../util/useAxios";
+import useAxios from "../../util/useAxios";
 
 const Amenity = () => {
   const [amenities, setAmenities] = useState({ results: [] });

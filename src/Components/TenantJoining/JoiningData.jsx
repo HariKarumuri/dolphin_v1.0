@@ -3,7 +3,7 @@ import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import { Link } from "react-router-dom";
-import useAxios from "../util/useAxios";
+import useAxios from "../../util/useAxios";
 
 const JoiningData = () => {
   const [joiningFormData, setJoiningFormData] = useState({ results: [] });

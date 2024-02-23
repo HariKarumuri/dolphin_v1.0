@@ -1,37 +1,36 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, NavLink, Route, Routes } from "react-router-dom";
-import Bookings from "./Components/Bookings";
+import Bookings from "./Components/PgProperties/Bookings";
 import DashBoard from "./DashBoard";
-import Maintenance from "./Components/Maintance";
-import VacatingForm from "./Components/VactingForm";
-import Amenity from "./Components/Amenity";
+import Maintenance from "./Components/Maintenance/Maintance";
+import VacatingForm from "./Components/Vacating/VactingForm";
+import Amenity from "./Components/PgProperties/Amenity";
 import Home from "./Home";
-import PgProperty from "./Components/PgProperty";
-import PgDetails from "./Components/PgDetails";
-import Room from "./Components/Room";
+import PgProperty from "./Components/PgProperties/PgProperty";
+import PgDetails from "./Components/PgProperties/PgDetails";
+import Room from "./Components/Room/Room";
 import RoomDetail from "./Components/Room/Roomdetail";
 import Receipt from "./Components/testpdf";
-import JoiningData from "./Components/JoiningData";
-import Sendwhatsapp from "./Components/Sendwhatsapp";
-import RentalForm from "./Components/RentalForm";
-import PgBed from "./Components/PgBed";
+import JoiningData from "./Components/TenantJoining/JoiningData";
+import Sendwhatsapp from "./Components/AddOns/Sendwhatsapp";
+import RentalForm from "./Components/Rental/RentalForm";
+import PgBed from "./Components/PgProperties/PgBed";
 import RoomHome from "./Components/Room/RoomHome";
 import Testing from "./Components/Testing";
 import logo from "./assets/Dolphin.png";
 import { useDolphinPGContext } from "./Context/DolphinPgcontext";
 import PrivateRoutes from "./util/PrivateRoutes";
-import Login from "./Components/login";
+import Login from "./Components/AddOns/login";
 import QueryParam from "./Components/Query param generator/QueryParam";
 import AuthContext from "./Context/AuthContext";
-import ProfileList from './Components/Users/ProfileList';
-import DetailedProfile from './Components/Users/DetailedProfile';
+import ProfileList from "./Components/Users/ProfileList";
+import DetailedProfile from "./Components/Users/DetailedProfile";
 import useAxios from "./util/useAxios";
 
 function App() {
   const [properties, setProperties] = useState([]);
   const { user, logoutUser } = useContext(AuthContext);
-  const api = useAxios()
-  
+  const api = useAxios();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -300,7 +299,10 @@ function App() {
             <Route path="/testing" element={<Testing />} />
             <Route path="/generator" element={<QueryParam />} />
             <Route path="/profileList" element={<ProfileList />} />
-            <Route path="/profileList/:id_1/:id_2" element={<DetailedProfile />} />
+            <Route
+              path="/profileList/:id_1/:id_2"
+              element={<DetailedProfile />}
+            />
           </Route>
         </Routes>
       </main>

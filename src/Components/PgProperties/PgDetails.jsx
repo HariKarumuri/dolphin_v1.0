@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import PgBed from "./PgBed";
-import useAxios from "../util/useAxios";
+import useAxios from "../../util/useAxios";
 
 const PgDetails = () => {
   const { id } = useParams();

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
-import useAxios from "./../util/useAxios";
+import useAxios from "../../util/useAxios";
 
 const VacatingForm = () => {
   const [vacatingFormData, setVacatingFormData] = useState({ results: [] });

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { useDolphinPGContext } from "../Context/DolphinPgcontext";
+import { useDolphinPGContext } from "../../Context/DolphinPgcontext";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import useAxios from "../util/useAxios";
+import useAxios from "../../util/useAxios";
 
 const PgBed = ({ pg_id }) => {
   const api = useAxios();

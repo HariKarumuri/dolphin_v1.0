@@ -1,13 +1,9 @@
-import React from 'react'
-import PgProperty from './Components/PgProperty'
-import Amenity from './Components/Amenity'
+import React from "react";
+import PgProperty from "./Components/PgProperties/PgProperty";
+import Amenity from "./Components/PgProperties/Amenity";
 
 const Home = () => {
-  return (
-    <div>
-      
-    </div>
-  )
-}
+  return <div></div>;
+};
 
-export default Home
+export default Home;
