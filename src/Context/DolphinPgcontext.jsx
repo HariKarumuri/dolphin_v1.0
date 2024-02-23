@@ -8,26 +8,38 @@ const baseURL = "https://popularpg.in/dolphinpg/";
 
 export const DolphinPGProvider = ({ children }) => {
   const [properties, setProperties] = useState([]);
-  const [maintenanceFormData, setMaintenanceFormData] = useState({});
-  const [vacatingFormData, setVacatingFormData] = useState({});
-  const [bedsFormData, setBedsFormData] = useState({});
+  const [maintenanceFormData, setMaintenanceFormData] = useState([]);
+  const [vacatingFormData, setVacatingFormData] = useState([]);
+  const [bedsFormData, setBedsFormData] = useState([]);
   const [bookings, setBookings] = useState([]);
   const [amenities, setAmenities] = useState([]);
   const [roomData, setRoomData] = useState([]);
-  const[joiningData,setJoiningData] = useState([]);
+  const [joiningData, setJoiningData] = useState([]);
+  const testingurl = "http://127.0.0.1:8000/";
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch data using the base URL
-        const propertiesResponse = await axios.get(`${baseURL}properties/`);
-        const bookingsResponse = await axios.get(`${baseURL}bookings/`);
-        const maintenanceResponse = await axios.get(`${baseURL}maintenance/`);
-        const amenitiesResponse = await axios.get(`${baseURL}amenities/`);
-        const roomDataResponse = await axios.get(`${baseURL}rooms/`);
-        const vactingDataResponse = await axios.get(`${baseURL}vacatingform/`);
-        const joingFormResponse = await axios.get(`${baseURL}tenantjoiningform/`);
-
+        // Use Promise.all to wait for all requests to complete
+        const [
+          propertiesResponse,
+          bookingsResponse,
+          maintenanceResponse,
+          amenitiesResponse,
+          roomDataResponse,
+          vactingDataResponse,
+          joingFormResponse,
+        ] = await Promise.all([
+          axios.get(`${baseURL}properties/`),
+          axios.get(`${baseURL}bookings/`),
+          axios.get(`${baseURL}maintenance/`),
+          axios.get(`${baseURL}amenities/`),
+          axios.get(`${baseURL}rooms/`),
+          axios.get(`${baseURL}vacatingform/`),
+          axios.get(`${baseURL}tenantjoiningform/`),
+        ]);
+  
+        // Update state after all requests are complete
         setProperties(propertiesResponse.data);
         setBookings(bookingsResponse.data);
         setMaintenanceFormData(maintenanceResponse.data);
@@ -39,28 +51,14 @@ export const DolphinPGProvider = ({ children }) => {
         console.error("Error fetching data:", error);
       }
     };
-
+  
     fetchData();
-  }, []); // Empty dependency array ensures that the effect runs once on mount
+  }, []);
 
   return (
     <DolphinPGContext.Provider
       value={{
-        properties,
-        setProperties,
-        maintenanceFormData,
-        setMaintenanceFormData,
-        vacatingFormData,
-        setVacatingFormData,
-        bedsFormData,
-        setBedsFormData,
-        bookings,
-        setBookings,
-        amenities,
-        setAmenities,
-        roomData,
-        joiningData,
-        
+       
       }}
     >
       {children}

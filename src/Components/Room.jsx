@@ -4,10 +4,12 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { useDolphinPGContext } from "../Context/DolphinPgcontext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
+import useAxios from "./../util/useAxios";
 
 const Room = () => {
-  const { properties } = useDolphinPGContext();
   const navigate = useNavigate();
+  const [properties, setProperties] = useState({ results: [] });
+  const api = useAxios();
 
   const { id: pgPropertyId } = useParams();
   const [roomData, setRoomData] = useState({ results: [] });
@@ -26,9 +28,9 @@ const Room = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          "https://popularpg.in/dolphinpg/rooms/"
-        );
+        const response = await api.get("/dolphinpg/rooms/");
+        const propertyResponse = await api.get("/dolphinpg/properties/");
+        setProperties({ results: propertyResponse.data });
         setRoomData({ results: response.data });
       } catch (error) {
         setError(error.message || "An error occurred while fetching the data.");
@@ -47,10 +49,7 @@ const Room = () => {
 
   const handleAddRoom = async () => {
     try {
-      const response = await axios.post(
-        "https://popularpg.in/dolphinpg/rooms/",
-        newRoomData
-      );
+      const response = await api.post("/dolphinpg/rooms/", newRoomData);
 
       setRoomData((prevData) => ({
         results: [...prevData.results, response.data],
@@ -100,10 +99,11 @@ const Room = () => {
 
     if (confirmed) {
       try {
-        await axios.delete(`https://popularpg.in/dolphinpg/rooms/${roomId}/`);
+        await api.delete(`/dolphinpg/rooms/${roomId}/`);
         setTimeout(() => {
           window.location.reload();
-        }, 500);
+        }, 700);
+        window.scrollTo(0, 0); // Scrolls to the top of the page
         setAlert({
           type: "success",
           message: "Room deleted successfully!",
@@ -131,7 +131,7 @@ const Room = () => {
   );
 
   if (!property) {
-    return <p>Property not found</p>;
+    return <p>Loading...</p>;
   }
 
   const propertyName = property.name;
@@ -152,23 +152,20 @@ const Room = () => {
 
   const handleAddBed = async () => {
     try {
-      const response = await axios.post(
-        "https://popularpg.in/dolphinpg/room-beds/",
-        {
-          bed_name: newBedName,
-          is_vacant: true,
-          room: selectedRoomId, // Use the selected room ID here
-          assign_tenant: null,
-        }
-      );
+      const response = await api.post("/dolphinpg/room-beds/", {
+        bed_name: newBedName,
+        is_vacant: true,
+        room: selectedRoomId, // Use the selected room ID here
+        assign_tenant: null,
+      });
 
       setAlert({
         type: "success",
         message: "Bed added successfully!",
       });
 
-      const updatedResponse = await axios.get(
-        `http://127.0.0.1:8000/dolphinpg/rooms/${selectedRoomId}/`
+      const updatedResponse = await api.get(
+        `/dolphinpg/rooms/${selectedRoomId}/`
       );
 
       setRoomData((prevData) => ({

@@ -129,11 +129,7 @@ const PgProperty = () => {
         },
       };
 
-      await axios.post(
-        "https://popularpg.in/dolphinpg/properties/",
-        formData,
-        config
-      );
+      await api.post("/dolphinpg/properties/", formData, config);
 
       setShowModal(false);
       fetchData();

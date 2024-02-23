@@ -44,10 +44,7 @@ const Maintenance = () => {
           whatsapp_number: request.whatsapp_number,
         };
 
-        await axios.put(
-          `https://popularpg.in/dolphinpg/maintenance/${id}/`,
-          requestData
-        );
+        await api.put(`/dolphinpg/maintenance/${id}/`, requestData);
 
         setMaintenanceData((prevData) =>
           prevData.map((item) =>

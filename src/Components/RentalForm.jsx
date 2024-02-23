@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import useAxios from "../util/useAxios";
 
 const RentalForm = () => {
-  const [rentalData, setRentalData] = useState([]);
+  const [rentalData, setRentalData] = useState({ results: [] });
+  const api = useAxios();
 
   useEffect(() => {
     // Fetch data from the API
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          "https://popularpg.in/dolphinpg/rental-form/"
-        );
-        setRentalData(response.data.results);
+        const response = await api.get("/dolphinpg/rental-form/");
+        console.log(response.data);
+        setRentalData({ results: response.data });
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -40,7 +41,7 @@ const RentalForm = () => {
           </tr>
         </thead>
         <tbody>
-          {rentalData.map((rental) => (
+          {rentalData.results.map((rental) => (
             <tr key={rental.id}>
               <td>
                 {new Date(rental.created_at).toLocaleString("en-GB", {

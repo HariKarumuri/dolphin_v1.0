@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import PgBed from "./PgBed";
+import useAxios from "../util/useAxios";
 
 const PgDetails = () => {
   const { id } = useParams();
+  const api = useAxios();
   const navigate = useNavigate();
   const [pgData, setPgData] = useState({
     name: "",
@@ -36,8 +38,8 @@ const PgDetails = () => {
 
   useEffect(() => {
     console.log("Fetching PG details...", id);
-    axios
-      .get(`https://popularpg.in/dolphinpg/properties/${id}/`)
+    api
+      .get(`/dolphinpg/properties/${id}/`)
       .then((response) => {
         setPgData(response.data);
         setUpdatedPgData(response.data);
@@ -48,8 +50,8 @@ const PgDetails = () => {
 
   const handleDelete = () => {
     if (window.confirm("Are you sure you want to delete this PG?")) {
-      axios
-        .delete(`https://popularpg.in/dolphinpg/properties/${id}/`)
+      api
+        .delete(`/dolphinpg/properties/${id}/`)
         .then(() => {
           alert("PG deleted successfully");
           navigate("/");
@@ -64,12 +66,8 @@ const PgDetails = () => {
         "Content-Type": "multipart/form-data",
       },
     };
-    axios
-      .put(
-        `https://popularpg.in/dolphinpg/properties/${id}/`,
-        updatedPgData,
-        config
-      )
+    api
+      .put(`/dolphinpg/properties/${id}/`, updatedPgData, config)
       .then(() => {
         alert("PG details updated successfully");
       })
@@ -102,8 +100,8 @@ const PgDetails = () => {
             <p className="mb-2">Lock-in Period: {pgData.lockin_period}</p>
             <p className="mb-4">Notice Period: {pgData.notice_period}</p>
             <small className="text-muted">
-              You can Upload images and add amenities by clicking Update
-              Details button
+              You can Upload images and add amenities by clicking Update Details
+              button
             </small>
           </div>
         </div>
@@ -124,12 +122,13 @@ const PgDetails = () => {
           </div>
           <div className="col-md-6">
             <h6>Amenities Info</h6>
-        <div className="d-flex flex-wrap">  
-            {pgData.amenities &&
-              pgData.amenities.map((amenity) => {
-                return <p key={amenity.id}>{amenity.amenity_name} , </p>;
-              })}
-          </div></div>
+            <div className="d-flex flex-wrap">
+              {pgData.amenities &&
+                pgData.amenities.map((amenity) => {
+                  return <p key={amenity.id}>{amenity.amenity_name} , </p>;
+                })}
+            </div>
+          </div>
         </div>
         <div className="d-flex mt-3">
           <button className="btn btn-danger mr-2" onClick={handleDelete}>
@@ -151,9 +150,7 @@ const PgDetails = () => {
                 <h2 className="modal-title">Update PG Details</h2>
               </div>
               <div className="modal-body">
-                <form>
-                  {/* Input fields for updating PG details */}
-                </form>
+                <form>{/* Input fields for updating PG details */}</form>
               </div>
               <div className="modal-footer">
                 <button className="btn btn-primary" onClick={handleUpdate}>
@@ -171,8 +168,10 @@ const PgDetails = () => {
         </div>
       )}
 
-      <h6 className="mt-4">Add PG-Bed Details and Pricing For Customers and Frontend</h6>
-      
+      <h6 className="mt-4">
+        Add PG-Bed Details and Pricing For Customers and Frontend
+      </h6>
+
       <PgBed pg_id={id} />
     </div>
   );

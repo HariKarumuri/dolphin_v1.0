@@ -27,7 +27,7 @@ const Amenity = () => {
   const handleAddAmenity = async () => {
     try {
       // Make a POST request to add a new amenity
-      await axios.post("https://popularpg.in/dolphinpg/amenities/", {
+      await api.post("/dolphinpg/amenities/", {
         amenity_name: newAmenityName,
       });
 

@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { useDolphinPGContext } from "../Context/DolphinPgcontext";
 import axios from "axios";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import useAxios from "../util/useAxios";
 
 const PgBed = ({ pg_id }) => {
-  const { properties } = useDolphinPGContext();
-
+  const api = useAxios();
   // State for form data
   const [beds, setBeds] = useState([
     {
@@ -35,7 +35,7 @@ const PgBed = ({ pg_id }) => {
       for (const bed of beds) {
         // Add your logic here to handle the form submission for each bed entry,
         // e.g., sending data to an API
-        await axios.post("https://popularpg.in/dolphinpg/beds/", bed);
+        await api.post("/dolphinpg/beds/", bed);
       }
 
       // All bed entries submitted successfully
@@ -152,16 +152,14 @@ const PgBed = ({ pg_id }) => {
           </div>
         ))}
         {showAlert && (
-        <div className="alert alert-success mt-3" role="alert">
-          Bed entries submitted successfully!
-        </div>
-      )}
+          <div className="alert alert-success mt-3" role="alert">
+            Bed entries submitted successfully!
+          </div>
+        )}
         <button type="submit" className="btn btn-success">
           Submit Beds
         </button>
       </form>
-
-      
     </div>
   );
 };

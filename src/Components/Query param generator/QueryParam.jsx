@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import ClipboardJS from "clipboard";
 import { useDolphinPGContext } from "../../Context/DolphinPgcontext";
+import useAxios from "../../util/useAxios";
 
 const generateQueryParamLink = (params) => {
   const queryParams = new URLSearchParams(params);
@@ -8,8 +9,8 @@ const generateQueryParamLink = (params) => {
 };
 
 const QueryParam = () => {
+  const api = useAxios();
   const [inputParams, setInputParams] = useState({
-    mobile_number: "",
     security_deposit: "",
     monthly_rent: "",
     maintenance_charges: "",
@@ -17,9 +18,20 @@ const QueryParam = () => {
     pg_name: "",
   });
 
-  const { properties } = useDolphinPGContext();
-  
-  
+  const [properties, setProperties] = useState({ results: [] });
+  const [copyButtonClicked, setCopyButtonClicked] = useState(false);
+  const handleCopyButtonClick = () => {
+    setCopyButtonClicked(!copyButtonClicked);
+  };
+
+  const fetchData = async () => {
+    try {
+      const response = await api.get("/dolphinpg/properties/");
+      setProperties({ results: response.data });
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -29,6 +41,7 @@ const QueryParam = () => {
   const linkInputRef = useRef(null);
 
   useEffect(() => {
+    fetchData();
     // Initialize Clipboard.js when the component mounts
     const clipboard = new ClipboardJS("#copyButton", {
       text: () => linkInputRef.current.value,
@@ -44,11 +57,10 @@ const QueryParam = () => {
       clipboard.destroy();
     });
 
-    // Clean up Clipboard.js when the component unmounts
     return () => {
       clipboard.destroy();
     };
-  }, []);
+  }, [copyButtonClicked]);
 
   // Generate the link
   const generatedLink = generateQueryParamLink(inputParams);
@@ -89,19 +101,6 @@ const QueryParam = () => {
               id="requested_room_number"
               name="requested_room_number"
               value={inputParams.requested_room_number}
-              onChange={handleChange}
-              className="form-control"
-            />
-          </div>
-          <div className="mb-3 col-4">
-            <label htmlFor="mobile_number" className="form-label">
-              Mobile Number:
-            </label>
-            <input
-              type="text"
-              id="mobile_number"
-              name="mobile_number"
-              value={inputParams.mobile_number}
               onChange={handleChange}
               className="form-control"
             />
@@ -162,6 +161,7 @@ const QueryParam = () => {
           className="btn btn-outline-success"
           type="button"
           id="copyButton"
+          onClick={handleCopyButtonClick}
         >
           Copy
         </button>

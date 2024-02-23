@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import useAxios from '../../util/useAxios';
 
 const TenantJoiningDetailView = () => {
   const { id } = useParams();
+  const api = useAxios()
   const [tenantDetails, setTenantDetails] = useState(null);
 
   useEffect(() => {
     const fetchTenantDetails = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:8000/dolphinpg/tenantjoiningform/${id}/`);
+        const response = await api.get(`/dolphinpg/tenantjoiningform/${id}/`);
         setTenantDetails(response.data);
       } catch (error) {
         console.error('Error fetching tenant details:', error);

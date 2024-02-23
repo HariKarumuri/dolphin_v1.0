@@ -2,12 +2,15 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
 import { useDolphinPGContext } from "../../Context/DolphinPgcontext";
+import useAxios from "../../util/useAxios";
 
 const Roomdetail = () => {
   const { id } = useParams();
+  const api = useAxios();
   const location = useLocation();
   const { bedData, pgPropertyId } = location.state;
-  const { joiningData } = useDolphinPGContext();
+
+  const [tenantJoiningForms, setTenantJoiningForms] = useState({ results: [] });
   const navigate = useNavigate();
 
   const [roomDetails, setRoomDetails] = useState(null);
@@ -31,9 +34,7 @@ const Roomdetail = () => {
   // Define the fetchRoomDetails function
   const fetchRoomDetails = async () => {
     try {
-      const response = await axios.get(
-        `https://popularpg.in/dolphinpg/room-beds/${id}/`
-      );
+      const response = await api.get(`/dolphinpg/room-beds/${id}/`);
       setRoomDetails(response.data);
       // Set the initial values for the updatedData state
       setUpdatedData({
@@ -49,18 +50,24 @@ const Roomdetail = () => {
       setLoading(false);
     }
   };
+  const fetchTenantJoiningForms = async () => {
+    try {
+      const response = await api.get(`dolphinpg/tenantjoiningform/`);
+      setTenantJoiningForms({ results: response.data });
+    } catch (error) {
+      console.error("Error fetching tenant joining forms", error);
+    }
+  };
 
   useEffect(() => {
     fetchRoomDetails();
+    fetchTenantJoiningForms();
   }, []);
 
   const handleUpdate = async () => {
     try {
       // Make the update API call
-      await axios.put(
-        `https://popularpg.in/dolphinpg/room-beds/${id}/`,
-        updatedData
-      );
+      await api.put(`/dolphinpg/room-beds/${id}/`, updatedData);
       // Close the modal
       setShowModal(false);
       // Fetch updated details
@@ -90,8 +97,8 @@ const Roomdetail = () => {
     return <div>Error: {error}</div>;
   }
 
-  const filteredTenants = joiningData.results
-    ? joiningData.results.filter((tenant) =>
+  const filteredTenants = tenantJoiningForms.results
+    ? tenantJoiningForms.results.filter((tenant) =>
         tenant.name.toLowerCase().includes(searchTerm.toLowerCase())
       )
     : [];
@@ -113,7 +120,7 @@ const Roomdetail = () => {
 
     try {
       // Make the delete API call
-      await axios.delete(`https://popularpg.in/dolphinpg/room-beds/${id}/`);
+      await api.delete(`/dolphinpg/room-beds/${id}/`);
 
       setTimeout(() => {
         fetchRoomDetails();
@@ -201,8 +208,8 @@ const Roomdetail = () => {
 
           <p>
             <span className="fw-bold">Assign a Tenant / Assigned Tenant: </span>
-            {joiningData.results && joiningData.results.length > 0
-              ? joiningData.results.find(
+            {tenantJoiningForms.results && tenantJoiningForms.results.length > 0
+              ? tenantJoiningForms.results.find(
                   (tenant) => tenant.id === roomDetails.assign_tenant
                 )?.name || "Not Assigned"
               : "Not Assigned"}
