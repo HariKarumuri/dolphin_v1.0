@@ -5,7 +5,6 @@ import DashBoard from "./DashBoard";
 import Maintenance from "./Components/Maintenance/Maintance";
 import VacatingForm from "./Components/Vacating/VactingForm";
 import Amenity from "./Components/PgProperties/Amenity";
-import Home from "./Home";
 import PgProperty from "./Components/PgProperties/PgProperty";
 import PgDetails from "./Components/PgProperties/PgDetails";
 import Room from "./Components/Room/Room";
@@ -16,9 +15,7 @@ import Sendwhatsapp from "./Components/AddOns/Sendwhatsapp";
 import RentalForm from "./Components/Rental/RentalForm";
 import PgBed from "./Components/PgProperties/PgBed";
 import RoomHome from "./Components/Room/RoomHome";
-import Testing from "./Components/Testing";
 import logo from "./assets/Dolphin.png";
-import { useDolphinPGContext } from "./Context/DolphinPgcontext";
 import PrivateRoutes from "./util/PrivateRoutes";
 import Login from "./Components/AddOns/login";
 import QueryParam from "./Components/Query param generator/QueryParam";
@@ -296,7 +293,6 @@ function App() {
             <Route path="/rentalform" element={<RentalForm />} />
             <Route path="/pgbeds" element={<PgBed />} />
             <Route path="/roomHome" element={<RoomHome />} />
-            <Route path="/testing" element={<Testing />} />
             <Route path="/generator" element={<QueryParam />} />
             <Route path="/profileList" element={<ProfileList />} />
             <Route

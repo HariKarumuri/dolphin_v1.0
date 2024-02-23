@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useDolphinPGContext } from "../../Context/DolphinPgcontext";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useParams } from "react-router-dom";
@@ -7,7 +6,7 @@ import useAxios from "../../util/useAxios";
 
 const DetailedProfile = () => {
   const api = useAxios();
-  const { testingurl } = useDolphinPGContext();
+  
   const [profiles, setProfiles] = useState({});
   const [tenantProfile, setTenantProfile] = useState({});
   const paramId = useParams();

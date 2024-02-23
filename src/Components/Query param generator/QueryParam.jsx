@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 import ClipboardJS from "clipboard";
-import { useDolphinPGContext } from "../../Context/DolphinPgcontext";
 import useAxios from "../../util/useAxios";
 
 const generateQueryParamLink = (params) => {

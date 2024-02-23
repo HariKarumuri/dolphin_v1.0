@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useDolphinPGContext } from "./Context/DolphinPgcontext";
 import useAxios from "./util/useAxios";
 
 
@@ -41,7 +40,7 @@ const DashBoard = () => {
     };
 
     fetchData();
-  }, []); // Empty dependency array ensures that the effect runs once on mount
+  }, [api]); 
 
   const vacantRooms = () => {
     const vacantRoomCount =
