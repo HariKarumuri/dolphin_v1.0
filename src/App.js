@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, NavLink, Route, Routes } from "react-router-dom";
 import Bookings from "./Components/Bookings";
 import DashBoard from "./DashBoard";
@@ -23,10 +23,30 @@ import PrivateRoutes from "./util/PrivateRoutes";
 import Login from "./Components/login";
 import QueryParam from "./Components/Query param generator/QueryParam";
 import AuthContext from "./Context/AuthContext";
+import ProfileList from './Components/Users/ProfileList';
+import DetailedProfile from './Components/Users/DetailedProfile';
+import useAxios from "./util/useAxios";
 
 function App() {
-  const { properties } = useDolphinPGContext();
+  const [properties, setProperties] = useState([]);
   const { user, logoutUser } = useContext(AuthContext);
+  const api = useAxios()
+  
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Fetch data using axios or your preferred method
+        const response = await api.get("/dolphinpg/properties/");
+        setProperties({ results: response.data });
+        // Set other state variables as needed
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData(); // Call the fetchData function
+  }, []);
 
   return (
     <div className="App">
@@ -241,6 +261,15 @@ function App() {
                     Tenant Form Link Generator
                   </NavLink>
                 </li>
+                <li className="nav-item">
+                  <NavLink
+                    className="nav-link"
+                    activeClassName="active"
+                    to="/profileList"
+                  >
+                    Users
+                  </NavLink>
+                </li>
               </ul>
             </div>
           </nav>
@@ -270,6 +299,8 @@ function App() {
             <Route path="/roomHome" element={<RoomHome />} />
             <Route path="/testing" element={<Testing />} />
             <Route path="/generator" element={<QueryParam />} />
+            <Route path="/profileList" element={<ProfileList />} />
+            <Route path="/profileList/:id_1/:id_2" element={<DetailedProfile />} />
           </Route>
         </Routes>
       </main>

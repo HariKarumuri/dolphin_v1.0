@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import useAxios from "./../util/useAxios";
 
 const Amenity = () => {
-  const [amenities, setAmenities] = useState([]);
+  const [amenities, setAmenities] = useState({ results: [] });
   const [loading, setLoading] = useState(true);
   const [newAmenityName, setNewAmenityName] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const api = useAxios();
 
   const fetchAmenities = async () => {
     try {
-      const response = await axios.get(
-        "https://popularpg.in/dolphinpg/amenities/"
-      );
-      setAmenities(response.data.results);
+      const response = await api.get("/dolphinpg/amenities/");
+      setAmenities({ results: response.data });
       setLoading(false);
     } catch (error) {
       console.error("Error fetching amenities data:", error);
@@ -57,15 +57,16 @@ const Amenity = () => {
         <p>Loading...</p>
       ) : (
         <div className="row">
-          {amenities.map((amenity) => (
-            <div key={amenity.id} className="col-md-3 mb-3">
-              <div className="card">
-                <div className="card-body">
-                  <h5 className="card-title">{amenity.amenity_name}</h5>
+          {amenities.results &&
+            amenities.results.map((amenity) => (
+              <div key={amenity.id} className="col-md-3 mb-3">
+                <div className="card">
+                  <div className="card-body">
+                    <h5 className="card-title">{amenity.amenity_name}</h5>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
       )}
 

@@ -2,18 +2,18 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
+import useAxios from "./../util/useAxios";
 
 const VacatingForm = () => {
-  const [vacatingFormData, setVacatingFormData] = useState([]);
+  const [vacatingFormData, setVacatingFormData] = useState({ results: [] });
   const [loading, setLoading] = useState(true);
+  const api = useAxios();
 
   useEffect(() => {
     const fetchVacatingFormData = async () => {
       try {
-        const response = await axios.get(
-          "https://popularpg.in/dolphinpg/vacatingform/"
-        );
-        setVacatingFormData(response.data.results);
+        const response = await api.get("/dolphinpg/vacatingform/");
+        setVacatingFormData({ results: response.data });
         setLoading(false);
       } catch (error) {
         console.error("Error fetching vacating form data:", error);
@@ -38,10 +38,7 @@ const VacatingForm = () => {
           acknowledged: true,
         };
 
-        await axios.put(
-          `https://popularpg.in/dolphinpg/vacatingform/${id}/`,
-          requestData
-        );
+        await api.put(`/dolphinpg/vacatingform/${id}/`, requestData);
 
         setVacatingFormData((prevData) =>
           prevData.map((item) =>
@@ -78,7 +75,7 @@ const VacatingForm = () => {
             </tr>
           </thead>
           <tbody>
-            {vacatingFormData.map((form) => (
+            {vacatingFormData.results.map((form) => (
               <tr key={form.id}>
                 <td>{form.name}</td>
                 <td>{form.whatsapp_number}</td>

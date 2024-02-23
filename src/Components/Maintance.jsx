@@ -1,24 +1,21 @@
-// Maintenance.js
-
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-
+import useAxios from "./../util/useAxios";
 
 const Maintenance = () => {
-  const [maintenanceData, setMaintenanceData] = useState([]);
+  const [maintenanceData, setMaintenanceData] = useState({ results: [] });
   const [loading, setLoading] = useState(true);
 
   const [filterPGName, setFilterPGName] = useState("");
   const [filterRoomNumber, setFilterRoomNumber] = useState("");
   const [filterAcknowledged, setFilterAcknowledged] = useState(null);
+  const api = useAxios();
 
   useEffect(() => {
     const fetchMaintenanceData = async () => {
       try {
-        const response = await axios.get(
-          "https://popularpg.in/dolphinpg/maintenance/"
-        );
-        setMaintenanceData(response.data.results);
+        const response = await api.get("/dolphinpg/maintenance/");
+        setMaintenanceData({ results: response.data });
         setLoading(false);
       } catch (error) {
         console.error("Error fetching maintenance data:", error);
@@ -66,7 +63,7 @@ const Maintenance = () => {
     }
   };
 
-  const filteredData = maintenanceData.filter((request) => {
+  const filteredData = maintenanceData.results.filter((request) => {
     const matchesPGName =
       request.pg_name.toLowerCase().includes(filterPGName.toLowerCase()) ||
       filterPGName === "";
@@ -154,7 +151,10 @@ const Maintenance = () => {
           </thead>
           <tbody>
             {filteredData.map((request) => (
-              <tr key={request.id} className={request.acknowledged ? "acknowledged-row" : ""}>
+              <tr
+                key={request.id}
+                className={request.acknowledged ? "acknowledged-row" : ""}
+              >
                 <td>
                   {new Date(request.created_at).toLocaleString("en-GB", {
                     day: "numeric",

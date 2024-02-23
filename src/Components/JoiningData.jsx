@@ -3,18 +3,18 @@ import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import { Link } from "react-router-dom";
+import useAxios from "../util/useAxios";
 
 const JoiningData = () => {
-  const [joiningFormData, setJoiningFormData] = useState(null);
+  const [joiningFormData, setJoiningFormData] = useState({ results: [] });
   const [sortOrder, setSortOrder] = useState("desc");
+  const api = useAxios();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          "https://popularpg.in/dolphinpg/tenantjoiningform/"
-        );
-        setJoiningFormData(response.data);
+        const response = await api.get("/dolphinpg/tenantjoiningform/");
+        setJoiningFormData({ results: response.data });
       } catch (error) {
         console.error("Error fetching joining form data:", error);
       }

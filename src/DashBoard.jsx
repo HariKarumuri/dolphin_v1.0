@@ -1,33 +1,63 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDolphinPGContext } from "./Context/DolphinPgcontext";
+import useAxios from "./util/useAxios";
+
 
 const DashBoard = () => {
-  const {
-    properties,
-    maintenanceFormData,
-    amenities,
-    roomData,
-    vacatingFormData,
-    bookings,
-    joiningData,
-  } = useDolphinPGContext();
+  const [properties, setProperties] = useState([]);
+  const [maintenanceFormData, setMaintenanceFormData] = useState([]);
+  const [amenities, setAmenities] = useState([]);
+  const [roomData, setRoomData] = useState([]);
+  const [vacatingFormData, setVacatingFormData] = useState([]);
+  const [bookings, setBookings] = useState([]);
+  const [joiningData, setJoiningData] = useState([]);
+  const api = useAxios(); 
+
+  useEffect(() => {
+    const fetchData = async () => {
+      
+
+      try {
+        const propertiesResponse = await api.get("/dolphinpg/properties/");
+        const maintenanceResponse = await api.get("/dolphinpg/maintenance/");
+        const amenitiesResponse = await api.get("/dolphinpg/amenities/");
+        const roomDataResponse = await api.get("/dolphinpg/rooms/");
+        const vacatingDataResponse = await api.get("/dolphinpg/vacatingform/");
+        const bookingsResponse = await api.get("/dolphinpg/bookings/");
+        const joiningFormResponse = await api.get(
+          "/dolphinpg/tenantjoiningform/"
+        );
+
+        setProperties(propertiesResponse.data);
+        setMaintenanceFormData(maintenanceResponse.data);
+        setAmenities(amenitiesResponse.data);
+        setRoomData(roomDataResponse.data);
+        setVacatingFormData(vacatingDataResponse.data);
+        setBookings(bookingsResponse.data);
+        setJoiningData(joiningFormResponse.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []); // Empty dependency array ensures that the effect runs once on mount
 
   const vacantRooms = () => {
-    const vacantRoomCount = roomData.results?.filter((room) =>
-      room.room_beds.some((bed) => bed.is_vacant)
-    )?.length || 0;
-  
+    const vacantRoomCount =
+      roomData?.filter((room) => room.room_beds.some((bed) => bed.is_vacant))
+        ?.length || 0;
+
     return vacantRoomCount;
   };
-  
+
   const occupiedRooms = () => {
-    const occupiedRoomCount = roomData.results?.filter((room) =>
-      room.room_beds.every((bed) => !bed.is_vacant)
-    )?.length || 0;
-  
+    const occupiedRoomCount =
+      roomData?.filter((room) => room.room_beds.every((bed) => !bed.is_vacant))
+        ?.length || 0;
+
     return occupiedRoomCount;
   };
-  
 
   return (
     <div className="container mt-4">
@@ -36,7 +66,7 @@ const DashBoard = () => {
         <div className="col-md-4 mb-4">
           <div className="card">
             <div className="card-body">
-              <h5 className="card-title">{properties.count}</h5>
+              <h5 className="card-title">{properties.length}</h5>
               <p className="card-text">PGs Listed</p>
             </div>
           </div>
@@ -44,7 +74,7 @@ const DashBoard = () => {
         <div className="col-md-4 mb-4">
           <div className="card">
             <div className="card-body">
-              <h5 className="card-title">{amenities.count}</h5>
+              <h5 className="card-title">{amenities.length}</h5>
               <p className="card-text">Amenities listed</p>
             </div>
           </div>
@@ -53,7 +83,7 @@ const DashBoard = () => {
         <div className="col-md-4 mb-4">
           <div className="card">
             <div className="card-body">
-              <h5 className="card-title">{vacatingFormData.count}</h5>
+              <h5 className="card-title">{vacatingFormData.length}</h5>
               <p className="card-text">Vacating Forms Received</p>
             </div>
           </div>
@@ -83,15 +113,17 @@ const DashBoard = () => {
         <div className="col-md-4 mb-4">
           <div className="card">
             <div className="card-body">
-              <h5 className="card-title">{bookings.count}</h5>
-              <p className="card-text">Bookings Received Total For Clarrification</p>
+              <h5 className="card-title">{bookings.length}</h5>
+              <p className="card-text">
+                Bookings Received Total For Clarrification
+              </p>
             </div>
           </div>
         </div>
         <div className="col-md-4 mb-4">
           <div className="card">
             <div className="card-body">
-              <h5 className="card-title">{joiningData.count}</h5>
+              <h5 className="card-title">{joiningData.length}</h5>
               <p className="card-text">Confirmed Bookings Received </p>
             </div>
           </div>
@@ -102,7 +134,7 @@ const DashBoard = () => {
         <div className="col-md-4 mb-4">
           <div className="card">
             <div className="card-body">
-              <h5 className="card-title">{maintenanceFormData.count}</h5>
+              <h5 className="card-title">{maintenanceFormData.length}</h5>
               <p className="card-text">Maintenance Forms Received</p>
             </div>
           </div>

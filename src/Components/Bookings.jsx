@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 const Bookings = () => {
-  const [bookings, setBookings] = useState([]);
+  const [bookings, setBookings] = useState({ results: [] });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -11,7 +11,7 @@ const Bookings = () => {
         const response = await axios.get(
           "https://popularpg.in/dolphinpg/bookings/"
         );
-        setBookings(response.data);
+        setBookings(({ results: response.data }));
         setLoading(false);
       } catch (error) {
         console.error("Error fetching bookings:", error);

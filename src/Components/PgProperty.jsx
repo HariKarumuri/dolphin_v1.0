@@ -1,21 +1,23 @@
-import React, { useState, useEffect ,useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { useDolphinPGContext } from "../Context/DolphinPgcontext";
+import useAxios from "../util/useAxios";
 
 const PgProperty = () => {
-  const { amenities } = useDolphinPGContext();
-  const [pgList, setPgList] = useState([]);
+  const [amenities, setAmenities] = useState({ results: [] });
+  const [pgList, setPgList] = useState({ results: [] });
   const [loading, setLoading] = useState(true);
   const [successMessage, setSuccessMessage] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [selectedImages, setSelectedImages] = useState([]);
   const fileInputRef = useRef(null);
+  const api = useAxios();
 
-      const handleUploadClick = () => {
-        fileInputRef.current.click();
-      };
+  const handleUploadClick = () => {
+    fileInputRef.current.click();
+  };
   const [newPgData, setNewPgData] = useState({
     name: "",
     street_address: "",
@@ -78,10 +80,12 @@ const PgProperty = () => {
     // Here you can handle the upload logic
     setNewPgData((prevData) => ({
       ...prevData,
-      uploaded_images: [...prevData.uploaded_images, ...selectedImages.map(img => img.file)],
+      uploaded_images: [
+        ...prevData.uploaded_images,
+        ...selectedImages.map((img) => img.file),
+      ],
     }));
   };
-
 
   const handleCoverImageChange = (e) => {
     const file = e.target.files[0];
@@ -125,8 +129,6 @@ const PgProperty = () => {
         },
       };
 
-      
-
       await axios.post(
         "https://popularpg.in/dolphinpg/properties/",
         formData,
@@ -168,10 +170,12 @@ const PgProperty = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(
-        "https://popularpg.in/dolphinpg/properties/"
-      );
-      setPgList(response.data);
+      const response = await api.get("/dolphinpg/properties/");
+      const amenitiesResponse = await api.get("/dolphinpg/amenities/");
+      setAmenities({ results: amenitiesResponse.data });
+      console.log(response.data);
+      console.log(amenitiesResponse.data);
+      setPgList({ results: response.data });
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -181,6 +185,8 @@ const PgProperty = () => {
 
   useEffect(() => {
     fetchData();
+
+    console.log("this is from pg list ", pgList);
   }, []);
 
   const calculateTotalSize = (images) => {
@@ -220,18 +226,19 @@ const PgProperty = () => {
         <p>Loading...</p>
       ) : (
         <ul className="row">
-          {pgList.results.map((pg) => (
-            <Link
-              key={pg.id}
-              to={`/property/${pg.id}`}
-              className="card text-center m-2 p-2 col-md-4"
-              style={{ textDecoration: "none", color: "inherit" }}
-            >
-              <div className="card-body">
-                <h5 className="card-title fw-bold">{pg.name}</h5>
-              </div>
-            </Link>
-          ))}
+          {pgList.results &&
+            pgList.results.map((pg) => (
+              <Link
+                key={pg.id}
+                to={`/property/${pg.id}`}
+                className="card text-center m-2 p-2 col-md-4"
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                <div className="card-body">
+                  <h5 className="card-title fw-bold">{pg.name}</h5>
+                </div>
+              </Link>
+            ))}
         </ul>
       )}
 
@@ -424,12 +431,11 @@ const PgProperty = () => {
                       accept="image/*"
                       onChange={handleCoverImageChange}
                     />
-                  </div> 
+                  </div>
                   <label htmlFor="propertyCoverImages" className="form-label">
-                      Property Multiple Images
-                    </label>
+                    Property Multiple Images
+                  </label>
                   <div className=" input-group mb-3">
-                   
                     <input
                       type="file"
                       id="propertyImages"
@@ -438,39 +444,42 @@ const PgProperty = () => {
                       accept="image/*"
                       onChange={handleImageChange}
                     />
-                 
-                 <div>
-      <button
-        className="btn btn-sm btn-dark"
-        onClick={handleUploadClick}
-      >
-        Add More
-      </button>
-      {/* Hidden input element */}
-      <input
-        type="file"
-        ref={fileInputRef}
-        style={{ display: "none" }}
-        multiple
-        accept="image/*"
-        onChange={handleImageChange}
-      />
-    </div>
+
+                    <div>
+                      <button
+                        className="btn btn-sm btn-dark"
+                        onClick={handleUploadClick}
+                      >
+                        Add More
+                      </button>
+                      {/* Hidden input element */}
+                      <input
+                        type="file"
+                        ref={fileInputRef}
+                        style={{ display: "none" }}
+                        multiple
+                        accept="image/*"
+                        onChange={handleImageChange}
+                      />
+                    </div>
                   </div>
                   {selectedImages.map((img, index) => (
-                      <div key={index}>
-                        <img
-                          src={URL.createObjectURL(img.file)}
-                          alt={img.title}
-                          width="100"
-                          height="100"
-                        />
-                        <span>{img.title}</span>
-                        <button className="btn btn-secondary btn-sm my-1" onClick={() => removeImage(index)}>
-                          x
-                        </button>
-                      </div>
-                    ))}
+                    <div key={index}>
+                      <img
+                        src={URL.createObjectURL(img.file)}
+                        alt={img.title}
+                        width="100"
+                        height="100"
+                      />
+                      <span>{img.title}</span>
+                      <button
+                        className="btn btn-secondary btn-sm my-1"
+                        onClick={() => removeImage(index)}
+                      >
+                        x
+                      </button>
+                    </div>
+                  ))}
 
                   {selectedImages.length > 0 && (
                     <div className="mb-3">
