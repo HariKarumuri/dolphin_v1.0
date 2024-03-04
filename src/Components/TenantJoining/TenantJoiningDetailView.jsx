@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import useAxios from "../../util/useAxios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -12,6 +12,7 @@ import { PDFViewer } from "@react-pdf/renderer";
 
 const TenantJoiningDetailView = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const api = useAxios();
   const [tenantDetails, setTenantDetails] = useState(null);
   const [updatedTenant, setUpdatedTenant] = useState({
@@ -348,6 +349,43 @@ const TenantJoiningDetailView = () => {
     }
   };
 
+  const handlePermenatDelete = async () => {
+    try {
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, delete it!",
+      });
+
+      if (result.isConfirmed) {
+        // User clicked "Yes, delete it!"
+        const csrftoken = getCookie("csrftoken");
+        const headers = {
+          "X-CSRFToken": csrftoken,
+          "Content-Type": "application/json",
+        };
+
+        await axios.delete(
+          `https://popularpg.in/dolphinpg/tenantjoiningform/${id}/`,
+          { headers }
+        );
+
+        Swal.fire({
+          title: "Deleted!",
+          text: "The record has been deleted.",
+          icon: "success",
+        });
+        navigate(-1);
+      }
+    } catch (error) {
+      console.error("Error deleting record:", error);
+    }
+  };
+
   return (
     <div className=" mt-4">
       <div class="row">
@@ -523,7 +561,7 @@ const TenantJoiningDetailView = () => {
                     <img
                       src={tenantDetails.tenant_image}
                       alt="avatar"
-                      className="rounded-circle object-fit-cover"
+                      className="rounded-circle object-fit-contain"
                       style={{ width: "150px", height: "150px" }}
                     />
                     <h5 className="my-3">{tenantDetails.name}</h5>
@@ -1397,6 +1435,16 @@ const TenantJoiningDetailView = () => {
                 </div>
               </div>
             </div>
+          </div>
+          <div className="d-flex justify-content-end mb-3">
+            <button
+              className="btn btn-danger"
+              onClick={() => {
+                handlePermenatDelete();
+              }}
+            >
+              Permenantly delete
+            </button>
           </div>
         </div>
       )}
