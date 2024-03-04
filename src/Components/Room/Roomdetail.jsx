@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
 import useAxios from "../../util/useAxios";
+import Select from "react-select";
 
 const Roomdetail = () => {
   const { id } = useParams();
@@ -278,50 +279,68 @@ const Roomdetail = () => {
                     <label htmlFor="assignTenant" className="form-label">
                       Assign Tenant
                     </label>
-                    <div className="input-group">
-                      <input
-                        type="text"
-                        className="form-control"
-                        placeholder="Search tenant..."
-                        onChange={(e) => handleSearch(e.target.value)}
-                      />
-                      <select
-                        className={`form-select ${
-                          filteredTenants.length > 0 ? "show" : ""
-                        }`}
-                        id="assignTenant"
-                        value={updatedData.assign_tenant}
-                        onChange={(e) => {
-                          const selectedValue = e.target.value;
 
-                          // Check if the selected option is "Vacant Room"
-                          if (selectedValue === "vacant") {
-                            setUpdatedData({
-                              ...updatedData,
-                              assign_tenant: null,
-                              is_vacant: true,
-                            });
-                          } else {
-                            // For other options, update assign_tenant and is_vacant accordingly
-                            setUpdatedData({
-                              ...updatedData,
-                              assign_tenant: selectedValue,
-                              is_vacant: false,
-                            });
-                          }
-                        }}
-                      >
-                        <option value={null}>Not Assigned</option>
-                        <option value="vacant">
-                          Vacant This Room/ Empty the room
-                        </option>
-                        {filteredTenants.map((tenant) => (
-                          <option key={tenant.id} value={tenant.id}>
-                            {tenant.name} - id :{tenant.id}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
+                    <Select
+                      className={`form-select ${
+                        filteredTenants.length > 0 ? "show" : ""
+                      }`}
+                      options={[
+                        { value: null, label: "Not Assigned" },
+                        {
+                          value: "vacant",
+                          label: "Vacant This Room/Empty the room",
+                        },
+                        ...filteredTenants
+                          .filter((tenant) => tenant.status === "verified") // Only show verified tenants
+                          .map((tenant) => ({
+                            value: tenant.id,
+                            label: `${tenant.name} - id: ${tenant.id}`,
+                          })),
+                      ]}
+                      value={
+                        updatedData.assign_tenant
+                          ? {
+                              value: updatedData.assign_tenant,
+                              label: `${
+                                updatedData.assign_tenant_name
+                                  ? updatedData.assign_tenant_name
+                                  : "Assigned Tenant"
+                              } - id: ${updatedData.assign_tenant}`, // Display the assigned tenant's name if available
+                            }
+                          : null
+                      }
+                      onChange={(selectedOption) => {
+                        const selectedValue = selectedOption
+                          ? selectedOption.value
+                          : null;
+
+                        // Check if the selected option is "Vacant Room"
+                        if (selectedValue === "vacant") {
+                          setUpdatedData({
+                            ...updatedData,
+                            assign_tenant: null,
+                            assign_tenant_name: null,
+                            is_vacant: true,
+                          });
+                        } else {
+                          const selectedTenant = filteredTenants.find(
+                            (tenant) => tenant.id === selectedValue
+                          );
+
+                          // For other options, update assign_tenant, assign_tenant_name, and is_vacant accordingly
+                          setUpdatedData({
+                            ...updatedData,
+                            assign_tenant: selectedValue,
+                            assign_tenant_name: selectedTenant
+                              ? selectedTenant.name
+                              : null,
+                            is_vacant: false,
+                          });
+                        }
+                      }}
+                      isSearchable
+                      placeholder="Select Tenant"
+                    />
                   </div>
                 </div>
                 <div className="modal-footer">
