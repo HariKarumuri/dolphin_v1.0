@@ -40,7 +40,7 @@ const DashBoard = () => {
     };
 
     fetchData();
-  }, [api]); 
+  }, []); 
 
   const vacantRooms = () => {
     const vacantRoomCount =

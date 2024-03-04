@@ -128,11 +128,11 @@ body {
 }
 
 .room-bed-details {
-  width: 50px;
-  height: 70px;
+  width: 45px;
+  height: 55px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 12px;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   color: black;
 }
 
@@ -229,3 +229,15 @@ body {
 .pointer-cursor {
   cursor: pointer;
 }
+
+/* custom small text class */
+
+.small-text-custom {
+  font-size: 0.85rem;
+}
+
+.custom-dropdown-toggle::after {
+  content: none; /* Unicode character for your custom arrow, adjust as needed */
+}
+
+

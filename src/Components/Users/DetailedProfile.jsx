@@ -32,7 +32,7 @@ const DetailedProfile = () => {
 
   useEffect(() => {
     fetchProfileDetails();
-  }, [paramId.id_1, paramId.id_2]);
+  }, []);
 
   return (
     <div>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faTrash, faPlus, faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import useAxios from "../../util/useAxios";
 
 const Room = () => {
@@ -29,12 +29,15 @@ const Room = () => {
       try {
         const response = await api.get("/dolphinpg/rooms/");
         const propertyResponse = await api.get("/dolphinpg/properties/");
-        setProperties({ results: propertyResponse.data });
+
+        // Check if properties are already set to avoid redundant calls
+        if (!properties.results.length) {
+          setProperties({ results: propertyResponse.data });
+        }
+
         setRoomData({ results: response.data });
       } catch (error) {
         setError(error.message || "An error occurred while fetching the data.");
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -239,75 +242,99 @@ const Room = () => {
         </button>
       </div>
 
-      <div className="row">
+      <div className="row gap-4 justify-content-center">
         {filteredRooms &&
           filteredRooms.map((room) => (
-            <div key={room.id} className="mb-4 border p-3 col-lg-3">
-              <div className="d-flex justify-content-between">
-                <h5 className="mb-3">Room {room.room_number}</h5>
-                <button
-                  type="button"
-                  className="btn btn-warning"
-                  data-bs-toggle="modal"
-                  data-bs-target="#AddRoomBed"
-                  onClick={() => openBedModal(room.id)}
-                >
-                  <FontAwesomeIcon icon={faPlus} />
-                </button>
+            <div
+              key={room.id}
+              className=" border p-3  col-md-3 col-sm-3 col-4  rounded shadow"
+            >
+              <div className="d-flex justify-content-between align-i">
+                <h6 className="mb-3">Room {room.room_number}</h6>
 
-                <div className="modal" id="AddRoomBed" tabIndex="-1">
-                  <div className="modal-dialog">
-                    <div className="modal-content">
-                      <div className="modal-header">
-                        <h5 className="modal-title">Add Bed</h5>
-                        <button
-                          type="button"
-                          className="btn-close"
-                          data-bs-dismiss="modal"
-                          aria-label="Close"
-                          onClick={closeBedModal}
-                        ></button>
-                      </div>
-                      <div className="modal-body">
-                        <form>
-                          <div className="form-group">
-                            <label htmlFor="bedName">Bed Name</label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              id="bedName"
-                              value={newBedName}
-                              onChange={handleBedNameInputChange}
-                            />
-                          </div>
+                <div className="dropdown ">
+                  <button
+                    className="btn  dropdown-toggle  custom-dropdown-toggle"
+                    type="button"
+                    id={`dropdown-room-${room.id}`}
+                    data-bs-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                  >
+                    <FontAwesomeIcon icon={faEllipsis} className="mr-2" />
+                  </button>
+                  <div
+                    className="dropdown-menu"
+                    aria-labelledby={`dropdown-room-${room.id}`}
+                  >
+                    <button
+                      className="dropdown-item small-text-custom"
+                      data-bs-toggle="modal"
+                      data-bs-target="#AddRoomBed"
+                      onClick={() => {
+                        openBedModal(room.id);
+                      }}
+                    >
+                      Add Bed
+                    </button>
 
+                    <button
+                      className="dropdown-item small-text-custom"
+                      onClick={() => {
+                        handleDeleteRoom(room.id);
+                      }}
+                    >
+                      Delete Room
+                    </button>
+                  </div>
+                  <div className="modal" id="AddRoomBed" tabIndex="-1">
+                    <div className="modal-dialog">
+                      <div className="modal-content">
+                        <div className="modal-header">
+                          <h5 className="modal-title">Add Bed</h5>
                           <button
                             type="button"
-                            className="btn btn-primary"
+                            className="btn-close"
                             data-bs-dismiss="modal"
                             aria-label="Close"
-                            onClick={() => {
-                              handleAddBed();
-                            }}
-                          >
-                            Add Bed
-                          </button>
-                        </form>
+                            onClick={closeBedModal}
+                          ></button>
+                        </div>
+                        <div className="modal-body">
+                          <form>
+                            <div className="form-group">
+                              <label htmlFor="bedName">Bed Name</label>
+                              <input
+                                type="text"
+                                className="form-control"
+                                id="bedName"
+                                value={newBedName}
+                                onChange={handleBedNameInputChange}
+                              />
+                            </div>
+
+                            <button
+                              type="button"
+                              className="btn btn-primary"
+                              data-bs-dismiss="modal"
+                              aria-label="Close"
+                              onClick={() => {
+                                handleAddBed();
+                              }}
+                            >
+                              Add Bed
+                            </button>
+                          </form>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-
-                <button
-                  type="button"
-                  className="btn btn-danger"
-                  onClick={() => handleDeleteRoom(room.id)}
-                >
-                  <FontAwesomeIcon icon={faTrash} />
-                </button>
               </div>
 
-              <h6 className="mt-3">Available Beds in the Room:</h6>
+              <h6 className="mt-1 text-secondary small-text-custom">
+                Available Beds :
+              </h6>
               <div className="d-flex flex-wrap gap-2 ">
                 {room.room_beds.map((bed) => (
                   <div
@@ -320,11 +347,11 @@ const Room = () => {
                       })
                     }
                     key={bed.id}
-                    className={`room-bed-details border p-2 d-flex justify-content-center align-items-center text-decoration-none pointer-cursor ${
+                    className={`room-bed-details  border p-2  d-flex justify-content-center align-items-center text-decoration-none pointer-cursor ${
                       bed.is_vacant ? "bg-green" : "bg-red"
                     }`}
                   >
-                    <strong>{bed.bed_name}</strong>
+                    <p className=" fw-bold my-auto">{bed.bed_name}</p>
                   </div>
                 ))}
               </div>

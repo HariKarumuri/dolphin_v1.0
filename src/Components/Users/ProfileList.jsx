@@ -226,7 +226,7 @@ const ProfileList = () => {
           </button>
         </li>
       </ul>
-      <div className="table-responsive">
+      <div className="table table-responsive">
         <table className="table table-hover mt-3">
           <thead>
             <tr>
@@ -241,84 +241,91 @@ const ProfileList = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredProfiles.map((profile) => (
-              <tr key={profile.id}>
-                <td className="text-secondary fw-bold">{profile.id}</td>
-                <td className="text-secondary">{profile.user.username}</td>
-                <td className="text-secondary">
-                  {profile.tenant_joining_form
-                    ? profile.tenant_joining_form.name
-                    : "N/A"}
-                </td>
-                <td className="text-secondary">
-                  {profile.tenant_joining_form
-                    ? profile.tenant_joining_form.email_id
-                    : "N/A"}
-                </td>
-                <td className="text-secondary">
-                  <div
-                    className={`rounded-circle ${
-                      profile.status === "active"
-                        ? "bg-success"
-                        : profile.status === "inactive"
-                        ? "bg-warning"
-                        : "bg-danger"
-                    }`}
-                    style={{
-                      width: "8px",
-                      height: "8px",
-                      display: "inline-block",
-                      marginRight: "5px",
-                    }}
-                  ></div>
-                  {profile.status}
-                </td>
-                <td className="">
-                  <span
-                    class="d-inline-block"
-                    tabindex="0"
-                    data-bs-toggle="tooltip"
-                    title="view"
-                  >
-                    <Link
-                      to={`/profileList/${profile.id}/${profile.tenant_joining_form.id}`}
+            {filteredProfiles &&
+              filteredProfiles.map((profile) => (
+                <tr key={profile.id}>
+                  <td className="text-secondary fw-bold">{profile.id}</td>
+                  <td className="text-secondary">{profile.user.username}</td>
+                  <td className="text-secondary">
+                    {profile.tenant_joining_form
+                      ? profile.tenant_joining_form.name
+                      : "N/A"}
+                  </td>
+                  <td className="text-secondary">
+                    {profile.tenant_joining_form
+                      ? profile.tenant_joining_form.email_id
+                      : "N/A"}
+                  </td>
+                  <td className="text-secondary">
+                    <div
+                      className={`rounded-circle ${
+                        profile.status === "active"
+                          ? "bg-success"
+                          : profile.status === "inactive"
+                          ? "bg-warning"
+                          : "bg-danger"
+                      }`}
+                      style={{
+                        width: "8px",
+                        height: "8px",
+                        display: "inline-block",
+                        marginRight: "5px",
+                      }}
+                    ></div>
+                    {profile.status}
+                  </td>
+                  <td className="">
+                    <span
+                      class="d-inline-block"
+                      tabindex="0"
+                      data-bs-toggle="tooltip"
+                      title="view"
                     >
-                      <i className="text-primary" style={{ cursor: "pointer" }}>
-                        <FontAwesomeIcon icon={faEye} />
+                      <Link
+                        to={`/profileList/${profile.id}/${profile.tenant_joining_form.id}`}
+                      >
+                        <i
+                          className="text-primary"
+                          style={{ cursor: "pointer" }}
+                        >
+                          <FontAwesomeIcon icon={faEye} />
+                        </i>
+                      </Link>
+                    </span>
+                  </td>
+                  <td className="">
+                    <span
+                      className="d-inline-block"
+                      tabindex="0"
+                      data-bs-toggle="tooltip"
+                      title="edit"
+                    >
+                      <i
+                        className="text-warning "
+                        style={{ cursor: "pointer" }}
+                      >
+                        <FontAwesomeIcon icon={faPen} />
                       </i>
-                    </Link>
-                  </span>
-                </td>
-                <td className="">
-                  <span
-                    class="d-inline-block"
-                    tabindex="0"
-                    data-bs-toggle="tooltip"
-                    title="edit"
-                  >
-                    <i className="text-warning " style={{ cursor: "pointer" }}>
-                      <FontAwesomeIcon icon={faPen} />
-                    </i>
-                  </span>
-                </td>
-                <td className="">
-                  <span
-                    class="d-inline-block"
-                    tabindex="0"
-                    data-bs-toggle="tooltip"
-                    title="delete"
-                  >
-                    <i
-                      className="text-danger"
-                      onClick={() => handleDeleteProfile(profile.id)}
-                      style={{ cursor: "pointer" }}
+                    </span>
+                  </td>
+                  <td className="">
+                    <span
+                      class="d-inline-block"
+                      tabindex="0"
+                      data-bs-toggle="tooltip"
+                      title="delete"
                     >
-                      <FontAwesomeIcon icon={faTrash} />
-                    </i>
-                  </span>
-                </td>
-              </tr>
-            ))}
+                      <i
+                        className="text-danger"
+                        onClick={() => handleDeleteProfile(profile.id)}
+                        style={{ cursor: "pointer" }}
+                      >
+                        <FontAwesomeIcon icon={faTrash} />
+                      </i>
+                    </span>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>
@@ -354,10 +361,12 @@ const ProfileList = () => {
                   </label>
                   <Select
                     id="tenantJoiningForm"
-                    options={tenantJoiningForms.results.map((form) => ({
-                      value: form.id,
-                      label: form.name,
-                    }))}
+                    options={tenantJoiningForms.results
+                      .filter((form) => form.status === "verified")
+                      .map((form) => ({
+                        value: form.id,
+                        label: form.name,
+                      }))}
                     onChange={handleTenantFormChange}
                     value={
                       newProfile.tenant_joining_form

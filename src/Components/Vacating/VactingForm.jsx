@@ -40,11 +40,12 @@ const VacatingForm = () => {
 
         await api.put(`/dolphinpg/vacatingform/${id}/`, requestData);
 
-        setVacatingFormData((prevData) =>
-          prevData.map((item) =>
+        setVacatingFormData((prevData) => ({
+          ...prevData,
+          results: prevData.results.map((item) =>
             item.id === id ? { ...item, acknowledged: true } : item
-          )
-        );
+          ),
+        }));
 
         // Show an alert for confirmation
         alert("Vacating form acknowledged successfully!");

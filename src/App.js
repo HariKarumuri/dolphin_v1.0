@@ -23,6 +23,9 @@ import AuthContext from "./Context/AuthContext";
 import ProfileList from "./Components/Users/ProfileList";
 import DetailedProfile from "./Components/Users/DetailedProfile";
 import useAxios from "./util/useAxios";
+import TenantJoiningDetailView from "./Components/TenantJoining/TenantJoiningDetailView";
+import TestPdf from "./Components/TenantJoining/TJPdf";
+import TJPdf from "./Components/TenantJoining/TJPdf";
 
 function App() {
   const [properties, setProperties] = useState([]);
@@ -42,7 +45,7 @@ function App() {
     };
 
     fetchData(); // Call the fetchData function
-  }, [api]);
+  }, []);
 
   return (
     <div className="App">
@@ -62,7 +65,7 @@ function App() {
         <a className=" col-md-3 col-lg-2 me-0 px-3 my-2" href="/">
           <img
             src={logo}
-            className ="img-fluid "
+            className="img-fluid "
             alt=""
             height="50px"
             width="90px"
@@ -288,7 +291,10 @@ function App() {
             <Route path="/rooms/beds/:id" element={<RoomDetail />} />
             <Route path="/pdftest" element={<Receipt />} />
             <Route path="/joiningdata" element={<JoiningData />} />
-            <Route path="/joiningdata/:id" element={<JoiningData />} />
+            <Route
+              path="/joiningdata/:id"
+              element={<TenantJoiningDetailView />}
+            />
             <Route path="/sendWhatsapp" element={<Sendwhatsapp />} />
             <Route path="/rentalform" element={<RentalForm />} />
             <Route path="/pgbeds" element={<PgBed />} />
@@ -299,6 +305,7 @@ function App() {
               path="/profileList/:id_1/:id_2"
               element={<DetailedProfile />}
             />
+            <Route path="/pdfTester" element={<TJPdf/>}/>
           </Route>
         </Routes>
       </main>
