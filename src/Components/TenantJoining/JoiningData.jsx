@@ -178,6 +178,7 @@ const JoiningData = () => {
             <th className=" ">View</th>
             <th className=" ">Edit</th>
             <th className=" ">Delete</th>
+            <th className=" ">pdf</th>
           </tr>
         </thead>
         <tbody>
@@ -251,7 +252,11 @@ const JoiningData = () => {
                     </i>
                   </span>
                 </td>
+                <td>
+                  <Link to={`/tjfpdf/${item.id}`}>click</Link>
+                </td>
               </tr>
+              
             ))}
         </tbody>
       </table>

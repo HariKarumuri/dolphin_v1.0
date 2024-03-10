@@ -10,6 +10,9 @@ import toastr from "toastr";
 import TJPdf from "./TJPdf";
 import { PDFViewer } from "@react-pdf/renderer";
 
+import { jsPDF } from "jspdf";
+import * as htmlToImage from "html-to-image";
+
 const TenantJoiningDetailView = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -43,6 +46,7 @@ const TenantJoiningDetailView = () => {
     vacating_date: "",
   });
   const [isModalOpen, setModalOpen] = useState(false); // State for modal visibility
+  const [pdfGenerating, setPdfGenerating] = useState(false); // State to track PDF generation
   const fetchTenantDetails = async () => {
     try {
       const response = await api.get(`/dolphinpg/tenantjoiningform/${id}/`);
@@ -386,6 +390,29 @@ const TenantJoiningDetailView = () => {
     }
   };
 
+  const generatePDF = async () => {
+    try {
+      setPdfGenerating(true); // Set state to indicate PDF generation is in progress
+
+      const htmlElement = document.getElementById("tenant-details");
+      if (!htmlElement) {
+        throw new Error("HTML element not found");
+      }
+
+      const pdf = new jsPDF();
+      pdf.html(htmlElement, {
+        callback: () => {
+          pdf.save("tenant-details.pdf");
+          setPdfGenerating(false); // Reset state after PDF generation completes
+        },
+        scale: 0.7, // Adjust the scale factor as needed (0.7 means 70% of original size)
+      });
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      setPdfGenerating(false); // Reset state after PDF generation fails
+    }
+  };
+
   return (
     <div className=" mt-4">
       <div class="row">
@@ -406,7 +433,7 @@ const TenantJoiningDetailView = () => {
         </div>
       </div>
       {tenantDetails && (
-        <div>
+        <div id="tenant-details">
           <div className="container py-5">
             <div className="row">
               {/* Tenant basic details  */}

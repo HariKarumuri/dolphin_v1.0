@@ -305,7 +305,7 @@ function App() {
               path="/profileList/:id_1/:id_2"
               element={<DetailedProfile />}
             />
-            <Route path="/pdfTester" element={<TJPdf/>}/>
+            <Route path="/tjfpdf/:id" element={<TJPdf/>}/>
           </Route>
         </Routes>
       </main>
