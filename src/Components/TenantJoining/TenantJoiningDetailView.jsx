@@ -211,7 +211,6 @@ const TenantJoiningDetailView = () => {
         `https://popularpg.in/dolphinpg/tenantjoiningform/${id}/`,
         {
           residential_address: updatedTenant.residential_address,
-          emergency_number: updatedTenant.emergency_number,
           mobile_number: updatedTenant.mobile_number,
           email_id: updatedTenant.email_id,
           date_of_birth: updatedTenant.date_of_birth,
@@ -891,28 +890,6 @@ const TenantJoiningDetailView = () => {
 
                               <div className="mb-3">
                                 <label
-                                  htmlFor="updateEmergencyNumber"
-                                  className="form-label"
-                                >
-                                  Emergency Number
-                                </label>
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  id="updateEmergencyNumber"
-                                  value={updatedTenant.emergency_number}
-                                  onChange={(e) =>
-                                    handleFieldChange(
-                                      "emergency_number",
-                                      e.target.value
-                                    )
-                                  }
-                                  required
-                                />
-                              </div>
-
-                              <div className="mb-3">
-                                <label
                                   htmlFor="updateMobileNumber"
                                   className="form-label"
                                 >
@@ -1035,19 +1012,7 @@ const TenantJoiningDetailView = () => {
                         </p>
                       </div>
                     </div>
-                    <hr />
-                    <div className="row">
-                      <div className="col-sm-3">
-                        <p className="mb-0">Emergency NO.</p>
-                      </div>
-                      <div className="col-sm-9">
-                        <p className="text-muted mb-0">
-                          {tenantDetails.emergency_number
-                            ? tenantDetails.emergency_number
-                            : "null"}
-                        </p>
-                      </div>
-                    </div>
+
                     <hr />
                     <div className="row">
                       <div className="col-sm-3">
